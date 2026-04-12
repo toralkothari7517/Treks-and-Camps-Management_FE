@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard – Treks & Camps</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #1a6b4a;
+    --brand-light: #e8f5ee;
+    --brand-dark: #0f4a32;
+    --sidebar-bg: #111e17;
+    --sidebar-text: rgba(255,255,255,0.65);
+    --sidebar-active: rgba(255,255,255,0.1);
+    --sidebar-width: 230px;
+    --topbar-h: 60px;
+    --text-main: #1c1c1c;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 12px;
+    --bg: #f5f6f4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    color: var(--text-main);
+    background: var(--bg);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 1.35rem 1.25rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-logo span {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: #fff;
+  }
+  .sidebar-logo span em { color: var(--brand); font-style: normal; }
+  .sidebar-logo .admin-tag {
+    display: block;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+  }
+  .sidebar-nav { padding: 1rem 0; flex: 1; }
+  .nav-section-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(255,255,255,0.25);
+    padding: 0.85rem 1.25rem 0.35rem;
+  }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.6rem 1.25rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    border-radius: 0;
+    transition: background 0.12s, color 0.12s;
+    cursor: pointer;
+  }
+  .sidebar-link:hover { background: var(--sidebar-active); color: #fff; }
+  .sidebar-link.active {
+    background: var(--sidebar-active);
+    color: #fff;
+    border-left: 2px solid var(--brand);
+  }
+  .sidebar-link svg { opacity: 0.7; flex-shrink: 0; }
+  .sidebar-link.active svg { opacity: 1; }
+  .sidebar-link .badge-count {
+    margin-left: auto;
+    background: var(--brand);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .sidebar-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 0.65rem;
+  }
+  .admin-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 500; color: #fff;
+    flex-shrink: 0;
+  }
+  .sidebar-footer .admin-name { font-size: 0.82rem; color: #fff; }
+  .sidebar-footer .admin-role { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+
+  /* MAIN AREA */
+  .main-area {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    height: var(--topbar-h);
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 1.75rem;
+    gap: 1rem;
+    position: sticky; top: 0;
+    z-index: 50;
+  }
+  .topbar h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+    flex: 1;
+  }
+  .topbar-search {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.38rem 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem;
+    outline: none;
+    background: var(--bg);
+    width: 200px;
+  }
+  .topbar-search:focus { border-color: var(--brand); background: #fff; }
+  .topbar-btn {
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.42rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .topbar-btn:hover { background: var(--brand-dark); }
+  .notif-btn {
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative;
+  }
+  .notif-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 7px; height: 7px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 1.5px solid #fff;
+  }
+
+  /* CONTENT */
+  .content { padding: 1.75rem; }
+
+  /* STAT CARDS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+  }
+  .stat-card .stat-label {
+    font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem;
+  }
+  .stat-card .stat-value {
+    font-size: 1.65rem; font-weight: 500; line-height: 1;
+    font-family: 'DM Serif Display', serif;
+  }
+  .stat-card .stat-change {
+    font-size: 0.75rem; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.3rem;
+  }
+  .stat-card .stat-change.up { color: #15803d; }
+  .stat-card .stat-change.down { color: #dc2626; }
+  .stat-card .stat-icon {
+    float: right;
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: -2px;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .section-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+  }
+  .link-sm {
+    font-size: 0.8rem; color: var(--brand); text-decoration: none;
+    font-weight: 500;
+  }
+  .link-sm:hover { text-decoration: underline; }
+
+  /* TABLES */
+  .table-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .table-card table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .table-card thead th {
+    background: #fafaf8;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: left;
+    white-space: nowrap;
+  }
+  .table-card tbody td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #f3f4f2;
+    vertical-align: middle;
+  }
+  .table-card tbody tr:last-child td { border-bottom: none; }
+  .table-card tbody tr:hover { background: #fafafa; }
+
+  /* STATUS BADGES */
+  .badge-status {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 500;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+  }
+  .badge-confirmed { background: #dcfce7; color: #166534; }
+  .badge-pending   { background: #fef3c7; color: #92400e; }
+  .badge-cancelled { background: #fee2e2; color: #991b1b; }
+  .badge-completed { background: #e0e7ff; color: #3730a3; }
+  .badge-upcoming  { background: var(--brand-light); color: var(--brand-dark); }
+  .badge-ongoing   { background: #fef3c7; color: #92400e; }
+
+  /* ACTION BTNS */
+  .btn-action {
+    font-size: 0.75rem; border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.25rem 0.6rem;
+    background: #fff; cursor: pointer; color: var(--text-main);
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.1s;
+    white-space: nowrap;
+  }
+  .btn-action:hover { background: var(--bg); }
+  .btn-action.danger { color: #dc2626; border-color: #fecaca; }
+  .btn-action.danger:hover { background: #fee2e2; }
+
+  /* BOTTOM GRID */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* CHART BAR */
+  .mini-chart { padding: 0.5rem 0; }
+  .chart-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.65rem; }
+  .chart-label { font-size: 0.78rem; color: var(--text-muted); min-width: 80px; }
+  .chart-bar-bg {
+    flex: 1; height: 8px;
+    background: var(--bg);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .chart-bar-fill { height: 100%; border-radius: 20px; background: var(--brand); }
+  .chart-val { font-size: 0.78rem; font-weight: 500; min-width: 36px; text-align: right; }
+
+  /* GUIDE LIST */
+  .guide-row {
+    display: flex; align-items: center;
+    gap: 0.75rem; padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .guide-row:last-child { border-bottom: none; }
+  .g-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--brand-light); color: var(--brand-dark);
+    font-size: 0.78rem; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .g-name { font-size: 0.85rem; font-weight: 500; }
+  .g-sub { font-size: 0.75rem; color: var(--text-muted); }
+  .g-rating { margin-left: auto; font-size: 0.82rem; color: #f59e0b; font-weight: 500; }
+
+  /* PAYMENT ALERTS */
+  .alert-item {
+    display: flex; align-items: flex-start;
+    gap: 0.75rem; padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px; background: #fff;
+    margin-bottom: 0.6rem;
+  }
+  .alert-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    margin-top: 4px; flex-shrink: 0;
+  }
+  .alert-item .a-title { font-size: 0.83rem; font-weight: 500; }
+  .alert-item .a-sub { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* RESPONSIVE SIDEBAR TOGGLE */
+  .sidebar-toggle {
+    display: none;
+    position: fixed; top: 10px; left: 10px;
+    z-index: 200;
+    background: var(--sidebar-bg);
+    border: none; border-radius: 8px;
+    width: 38px; height: 38px;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+
+  @media (max-width: 992px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .bottom-grid { grid-template-columns: 1fr; }
+    .sidebar { transform: translateX(-100%); transition: transform 0.25s; }
+    .sidebar.open { transform: translateX(0); }
+    .main-area { margin-left: 0; }
+    .sidebar-toggle { display: flex; }
+  }
+  @media (max-width: 576px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .topbar-search { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR TOGGLE (mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle">
+  <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span>Trek<em>&</em>Camp</span>
+    <span class="admin-tag">Admin Panel</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a class="sidebar-link active" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+
+    <div class="nav-section-label">Management</div>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+      Treks
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+      Camps
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Guides
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      Transport
+    </a>
+
+    <div class="nav-section-label">Bookings</div>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      All Bookings
+      <span class="badge-count">3</span>
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Payments
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Feedback
+    </a>
+
+    <div class="nav-section-label">Reports</div>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Revenue
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Participants Health
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-avatar">AD</div>
+    <div>
+      <div class="admin-name">Admin User</div>
+      <div class="admin-role">Super Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN AREA -->
+<div class="main-area">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <h1>Dashboard</h1>
+    <input type="text" class="topbar-search" placeholder="Search bookings, treks…">
+    <div class="notif-btn">
+      <svg width="16" height="16" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="notif-dot"></div>
+    </div>
+    <button class="topbar-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Trek
+    </button>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-icon" style="background:#e8f5ee;">
+            <svg width="18" height="18" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+        </div>
+        <div class="stat-value">₹4.2L</div>
+        <div class="stat-change up">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          +12% from last month
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="stat-label">Active Bookings</div>
+          <div class="stat-icon" style="background:#eff6ff;">
+            <svg width="18" height="18" fill="none" stroke="#1d4ed8" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+        </div>
+        <div class="stat-value">38</div>
+        <div class="stat-change up">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          8 new this week
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="stat-label">Trek Instances</div>
+          <div class="stat-icon" style="background:#fef3c7;">
+            <svg width="18" height="18" fill="none" stroke="#b45309" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+          </div>
+        </div>
+        <div class="stat-value">12</div>
+        <div class="stat-change" style="color:var(--text-muted);">5 upcoming · 2 ongoing</div>
+      </div>
+      <div class="stat-card">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="stat-label">Pending Payments</div>
+          <div class="stat-icon" style="background:#fee2e2;">
+            <svg width="18" height="18" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+        </div>
+        <div class="stat-value">3</div>
+        <div class="stat-change down">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          ₹28,500 overdue
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT BOOKINGS TABLE -->
+    <div class="section-header">
+      <h2>Recent Bookings</h2>
+      <a href="#" class="link-sm">View all →</a>
+    </div>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Trek</th>
+            <th>Participant(s)</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem; color:var(--brand);">BKG001</td>
+            <td>Kedarkantha Trek</td>
+            <td>Ananya S. <span style="color:var(--text-muted);font-size:0.78rem;">+1</span></td>
+            <td style="color:var(--text-muted);">Jun 14, 2026</td>
+            <td style="font-weight:500;">₹17,000</td>
+            <td><span class="badge-status badge-confirmed">Paid</span></td>
+            <td><span class="badge-status badge-confirmed">Confirmed</span></td>
+            <td><button class="btn-action">View</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem; color:var(--brand);">BKG002</td>
+            <td>Chopta Chandrashila</td>
+            <td>Vikram P.</td>
+            <td style="color:var(--text-muted);">Jun 20, 2026</td>
+            <td style="font-weight:500;">₹12,500</td>
+            <td><span class="badge-status badge-pending">Pending</span></td>
+            <td><span class="badge-status badge-pending">Pending</span></td>
+            <td><button class="btn-action">View</button> <button class="btn-action" style="margin-left:4px;">Confirm</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem; color:var(--brand);">BKG003</td>
+            <td>Valley of Flowers</td>
+            <td>Meera J. <span style="color:var(--text-muted);font-size:0.78rem;">+3</span></td>
+            <td style="color:var(--text-muted);">Jul 5, 2026</td>
+            <td style="font-weight:500;">₹46,000</td>
+            <td><span class="badge-status badge-confirmed">Paid</span></td>
+            <td><span class="badge-status badge-confirmed">Confirmed</span></td>
+            <td><button class="btn-action">View</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem; color:var(--brand);">BKG004</td>
+            <td>Hampta Pass</td>
+            <td>Rohit M.</td>
+            <td style="color:var(--text-muted);">Jul 12, 2026</td>
+            <td style="font-weight:500;">₹9,800</td>
+            <td><span class="badge-status badge-pending">Pending</span></td>
+            <td><span class="badge-status badge-pending">Pending</span></td>
+            <td><button class="btn-action">View</button> <button class="btn-action danger" style="margin-left:4px;">Cancel</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem; color:var(--brand);">BKG005</td>
+            <td>Kedarkantha Trek</td>
+            <td>Priya K. <span style="color:var(--text-muted);font-size:0.78rem;">+2</span></td>
+            <td style="color:var(--text-muted);">May 10, 2026</td>
+            <td style="font-weight:500;">₹25,500</td>
+            <td><span class="badge-status badge-confirmed">Paid</span></td>
+            <td><span class="badge-status badge-completed">Completed</span></td>
+            <td><button class="btn-action">View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TREK INSTANCES TABLE -->
+    <div class="section-header">
+      <h2>Trek Instances</h2>
+      <a href="#" class="link-sm">Manage all →</a>
+    </div>
+    <div class="table-card" style="margin-bottom:1.5rem;">
+      <table>
+        <thead>
+          <tr>
+            <th>Instance ID</th>
+            <th>Trek Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Occupancy</th>
+            <th>Guide</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem;">INS001</td>
+            <td>Kedarkantha Trek</td>
+            <td>Jun 14, 2026</td>
+            <td>Jun 20, 2026</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <div style="flex:1; height:6px; background:var(--bg); border-radius:20px; overflow:hidden; min-width:60px;">
+                  <div style="width:67%; height:100%; background:var(--brand); border-radius:20px;"></div>
+                </div>
+                <span style="font-size:0.78rem; color:var(--text-muted);">12/18</span>
+              </div>
+            </td>
+            <td>Rajesh K.</td>
+            <td><span class="badge-status badge-upcoming">Upcoming</span></td>
+            <td><button class="btn-action">Edit</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem;">INS002</td>
+            <td>Chopta Chandrashila</td>
+            <td>Jun 20, 2026</td>
+            <td>Jun 25, 2026</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <div style="flex:1; height:6px; background:var(--bg); border-radius:20px; overflow:hidden; min-width:60px;">
+                  <div style="width:40%; height:100%; background:var(--brand); border-radius:20px;"></div>
+                </div>
+                <span style="font-size:0.78rem; color:var(--text-muted);">6/15</span>
+              </div>
+            </td>
+            <td>Suresh P.</td>
+            <td><span class="badge-status badge-upcoming">Upcoming</span></td>
+            <td><button class="btn-action">Edit</button></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500; font-size:0.82rem;">INS003</td>
+            <td>Hampta Pass</td>
+            <td>Apr 10, 2026</td>
+            <td>Apr 17, 2026</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <div style="flex:1; height:6px; background:var(--bg); border-radius:20px; overflow:hidden; min-width:60px;">
+                  <div style="width:100%; height:100%; background:#f59e0b; border-radius:20px;"></div>
+                </div>
+                <span style="font-size:0.78rem; color:var(--text-muted);">20/20</span>
+              </div>
+            </td>
+            <td>Kavita M.</td>
+            <td><span class="badge-status badge-ongoing">Ongoing</span></td>
+            <td><button class="btn-action">Track</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BOTTOM GRID -->
+    <div class="bottom-grid">
+
+      <!-- REVENUE CHART -->
+      <div>
+        <div class="section-header">
+          <h2>Revenue by Trek</h2>
+          <a href="#" class="link-sm">Full report →</a>
+        </div>
+        <div class="table-card" style="padding: 1.25rem 1.25rem 0.75rem;">
+          <div class="mini-chart">
+            <div class="chart-row"><div class="chart-label">Kedarkantha</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:88%;"></div></div><div class="chart-val">₹1.4L</div></div>
+            <div class="chart-row"><div class="chart-label">Valley of Flowers</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:72%;"></div></div><div class="chart-val">₹1.1L</div></div>
+            <div class="chart-row"><div class="chart-label">Hampta Pass</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:55%;"></div></div><div class="chart-val">₹86K</div></div>
+            <div class="chart-row"><div class="chart-label">Chopta</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:38%;"></div></div><div class="chart-val">₹58K</div></div>
+            <div class="chart-row"><div class="chart-label">Other Treks</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:25%;"></div></div><div class="chart-val">₹38K</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GUIDE PERFORMANCE -->
+      <div>
+        <div class="section-header">
+          <h2>Guide Performance</h2>
+          <a href="#" class="link-sm">All guides →</a>
+        </div>
+        <div class="table-card" style="padding: 0.75rem 1.25rem;">
+          <div class="guide-row">
+            <div class="g-avatar">RK</div>
+            <div><div class="g-name">Rajesh Kumar</div><div class="g-sub">8 yrs · 24 treks</div></div>
+            <div class="g-rating">★ 4.9</div>
+          </div>
+          <div class="guide-row">
+            <div class="g-avatar">SP</div>
+            <div><div class="g-name">Suresh Pandey</div><div class="g-sub">5 yrs · 18 treks</div></div>
+            <div class="g-rating">★ 4.7</div>
+          </div>
+          <div class="guide-row">
+            <div class="g-avatar">KM</div>
+            <div><div class="g-name">Kavita Maurya</div><div class="g-sub">6 yrs · 21 treks</div></div>
+            <div class="g-rating">★ 4.8</div>
+          </div>
+          <div class="guide-row">
+            <div class="g-avatar">AS</div>
+            <div><div class="g-name">Arun Singh</div><div class="g-sub">3 yrs · 9 treks</div></div>
+            <div class="g-rating">★ 4.5</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PENDING PAYMENT ALERTS -->
+    <div class="section-header">
+      <h2>Pending Payment Alerts</h2>
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot" style="background:#dc2626;"></div>
+      <div>
+        <div class="a-title">BKG002 – Vikram P. · Chopta Chandrashila</div>
+        <div class="a-sub">₹12,500 pending · Due Jun 13, 2026 · 3 days overdue</div>
+      </div>
+      <button class="btn-action ms-auto">Send Reminder</button>
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot" style="background:#f59e0b;"></div>
+      <div>
+        <div class="a-title">BKG004 – Rohit M. · Hampta Pass</div>
+        <div class="a-sub">₹9,800 pending · Due Apr 20, 2026 · 1 day overdue</div>
+      </div>
+      <button class="btn-action ms-auto">Send Reminder</button>
+    </div>
+    <div class="alert-item">
+      <div class="alert-dot" style="background:#f59e0b;"></div>
+      <div>
+        <div class="a-title">BKG007 – Deepak R. · Valley of Flowers</div>
+        <div class="a-sub">₹6,200 partial payment · Balance due Jun 30, 2026</div>
+      </div>
+      <button class="btn-action ms-auto">View Details</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

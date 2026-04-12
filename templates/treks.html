@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Available Treks</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-C8jQGZ9Rg7uWe6EmxRqnCqSApGxN4P0qPbrIk1H7vHWv+G1AVnWp0B9WFGx0eN9I" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-success" href="/">GreenTrail</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/treks">Explore Treks</a></li>
+          <li class="nav-item"><a class="nav-link" href="/my-bookings">My Bookings</a></li>
+          <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5">
+    <div class="row gx-4 align-items-center mb-5">
+      <div class="col-lg-7">
+        <h1 class="display-6 fw-bold">Find the perfect trek for your next getaway</h1>
+        <p class="lead text-muted">Use the interactive filter ribbon and preview top difficulty categories in the carousel below.</p>
+      </div>
+      <div class="col-lg-5">
+        <div id="trekFilterCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner rounded-4 shadow-sm overflow-hidden bg-white">
+            <div class="carousel-item active">
+              <div class="p-4">
+                <h5 class="text-success fw-semibold">Easy Treks</h5>
+                <p class="text-muted mb-0">Beginner-friendly routes with relaxing camp stays.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="p-4">
+                <h5 class="text-success fw-semibold">Moderate Treks</h5>
+                <p class="text-muted mb-0">Balanced journeys for explorers who want more challenge.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="p-4">
+                <h5 class="text-success fw-semibold">Difficult & Extreme</h5>
+                <p class="text-muted mb-0">For adventurers seeking an intense, scenic experience.</p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#trekFilterCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#trekFilterCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="mb-4">
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <button class="btn btn-outline-success filter-link" data-difficulty="">All</button>
+        <button class="btn btn-outline-success filter-link" data-difficulty="Easy">Easy</button>
+        <button class="btn btn-outline-success filter-link" data-difficulty="Moderate">Moderate</button>
+        <button class="btn btn-outline-success filter-link" data-difficulty="Difficult">Difficult</button>
+        <button class="btn btn-outline-success filter-link" data-difficulty="Extreme">Extreme</button>
+      </div>
+    </section>
+
+    <div class="row g-4">
+      {% if treks %}
+        {% for trek in treks %}
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body">
+                <span class="badge bg-success bg-opacity-15 text-success mb-2">{{ trek.Difficulty_Level }}</span>
+                <h5 class="card-title">{{ trek.Trek_Name }}</h5>
+                <p class="text-muted mb-2">₹{{ trek.Price }} • {{ trek.StartDate }} — {{ trek.EndDate }}</p>
+                <p class="mb-3 text-body-secondary">Available slots: <strong>{{ trek.Available_Slots }}</strong></p>
+                <a href="/trek/{{ trek.InstanceID }}" class="btn btn-sm btn-success">View Details</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12">
+          <div class="card border-0 shadow-sm p-4">
+            <p class="mb-0">No treks match your filter. Try another category.</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer class="bg-white py-4 shadow-sm">
+    <div class="container text-center text-muted">&copy; 2026 GreenTrail</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qXaMeVt1LIZXnG/kZPw4bFn1ox78WolMIpTjN/2rXjzPJGw2EAWac2cPIu2sHfX7" crossorigin="anonymous"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
