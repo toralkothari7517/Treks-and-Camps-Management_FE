@@ -1,110 +1,1081 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Available Treks</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-C8jQGZ9Rg7uWe6EmxRqnCqSApGxN4P0qPbrIk1H7vHWv+G1AVnWp0B9WFGx0eN9I" crossorigin="anonymous" />
-  <link rel="stylesheet" href="/static/css/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore Treks – Trek&Camp</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #1a6b4a;
+    --brand-light: #e8f5ee;
+    --brand-dark: #0f4a32;
+    --brand-mid: #2d8f62;
+    --text-main: #1c1c1c;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f9f9f7;
+    --radius: 14px;
+    --card-radius: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    color: var(--text-main);
+    background: var(--bg);
+  }
+
+  /* ── NAVBAR ── */
+  .navbar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 0;
+    position: sticky; top: 0; z-index: 200;
+  }
+  .navbar-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    color: var(--brand-dark) !important;
+    letter-spacing: -0.3px;
+  }
+  .navbar-brand em { color: var(--brand); font-style: normal; }
+  .nav-link {
+    font-size: 0.875rem; color: var(--text-muted) !important;
+    font-weight: 400; padding: 0.4rem 0.9rem !important;
+    transition: color 0.15s;
+  }
+  .nav-link:hover, .nav-link.active-link { color: var(--brand-dark) !important; }
+  .btn-nav-book {
+    background: var(--brand); color: #fff !important;
+    border-radius: 8px; font-size: 0.875rem;
+    padding: 0.4rem 1.1rem !important; font-weight: 500;
+    transition: background 0.15s;
+  }
+  .btn-nav-book:hover { background: var(--brand-dark); }
+
+  /* ── HERO CAROUSEL ── */
+  .hero-carousel { position: relative; }
+  .carousel-item { height: 480px; position: relative; overflow: hidden; }
+  .carousel-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 6s ease;
+  }
+  .carousel-item.active img { transform: scale(1.04); }
+  .carousel-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(5,20,12,0.78) 0%, rgba(5,20,12,0.2) 55%, transparent 100%);
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem 3.5rem;
+  }
+  .carousel-overlay .slide-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    padding: 0.3rem 0.8rem; border-radius: 20px;
+    backdrop-filter: blur(6px);
+    margin-bottom: 0.75rem; width: fit-content;
+  }
+  .carousel-overlay h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem; color: #fff;
+    line-height: 1.1; letter-spacing: -0.5px;
+    margin-bottom: 0.6rem;
+  }
+  .carousel-overlay p {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem; max-width: 440px;
+    line-height: 1.6; margin-bottom: 1.2rem;
+  }
+  .slide-meta {
+    display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+  }
+  .slide-meta span {
+    color: rgba(255,255,255,0.75); font-size: 0.82rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-slide-cta {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--brand); color: #fff;
+    border: none; border-radius: 9px;
+    padding: 0.65rem 1.4rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+  .btn-slide-cta:hover { background: var(--brand-dark); color: #fff; }
+  .carousel-control-prev, .carousel-control-next {
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 50%; top: 50%; transform: translateY(-50%);
+    backdrop-filter: blur(4px);
+    opacity: 1 !important;
+    margin: 0 1.25rem;
+    align-items: center; justify-content: center;
+  }
+  .carousel-control-prev { left: 0; }
+  .carousel-control-next { right: 0; }
+  .carousel-control-prev-icon, .carousel-control-next-icon { width: 16px; height: 16px; }
+  .carousel-indicators {
+    margin-bottom: 1.25rem;
+  }
+  .carousel-indicators [data-bs-target] {
+    width: 6px; height: 6px; border-radius: 50%;
+    border: none; background: rgba(255,255,255,0.4);
+    transition: background 0.2s, width 0.2s;
+  }
+  .carousel-indicators .active {
+    background: #fff; width: 22px; border-radius: 3px;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 0;
+    position: sticky; top: 60px; z-index: 100;
+  }
+  .filter-wrap {
+    display: flex; align-items: center; gap: 0.65rem;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: 0.78rem; color: var(--text-muted);
+    font-weight: 500; margin-right: 0.25rem;
+    white-space: nowrap;
+  }
+  .filter-chip {
+    display: inline-flex; align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 0.38rem 0.85rem;
+    font-size: 0.82rem; color: var(--text-muted);
+    background: #fff; cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .filter-chip:hover { border-color: var(--brand); color: var(--brand-dark); }
+  .filter-chip.active {
+    background: var(--brand-light);
+    border-color: var(--brand);
+    color: var(--brand-dark);
+    font-weight: 500;
+  }
+  .filter-select {
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 0.38rem 0.85rem; font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif; color: var(--text-muted);
+    background: #fff; outline: none; cursor: pointer;
+    transition: border-color 0.15s;
+    appearance: none;
+    padding-right: 1.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+  }
+  .filter-select:focus { border-color: var(--brand); color: var(--text-main); }
+  .result-count {
+    margin-left: auto; font-size: 0.8rem; color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .result-count span { color: var(--brand-dark); font-weight: 500; }
+
+  /* ── SECTION ── */
+  .treks-section { padding: 2.25rem 0 4rem; }
+  .section-eyebrow {
+    font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--brand);
+    font-weight: 500; margin-bottom: 0.35rem;
+  }
+  .section-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem; letter-spacing: -0.3px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── TREK CARD ── */
+  .trek-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+    display: flex; flex-direction: column;
+  }
+  .trek-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.09);
+  }
+  .card-img-wrap {
+    position: relative; height: 210px; overflow: hidden;
+  }
+  .card-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .trek-card:hover .card-img-wrap img { transform: scale(1.05); }
+  .card-badge-diff {
+    position: absolute; top: 12px; left: 12px;
+    font-size: 0.68rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 0.28rem 0.65rem; border-radius: 20px;
+    backdrop-filter: blur(6px);
+  }
+  .diff-easy    { background: rgba(220,252,231,0.9); color: #166534; }
+  .diff-moderate{ background: rgba(254,243,199,0.9); color: #92400e; }
+  .diff-difficult{ background: rgba(254,226,226,0.9); color: #991b1b; }
+  .diff-extreme { background: rgba(30,10,10,0.75); color: #fca5a5; }
+  .card-wishlist {
+    position: absolute; top: 10px; right: 10px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.85); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+    backdrop-filter: blur(4px);
+  }
+  .card-wishlist:hover { background: #fff; }
+  .card-wishlist svg { transition: fill 0.15s; }
+  .card-wishlist.wished svg { fill: #ef4444; stroke: #ef4444; }
+  .card-body-inner {
+    padding: 1.1rem 1.2rem 1.2rem;
+    display: flex; flex-direction: column; flex: 1;
+  }
+  .card-location {
+    font-size: 0.75rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: 0.3rem;
+    margin-bottom: 0.4rem;
+  }
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem; letter-spacing: -0.2px;
+    margin-bottom: 0.55rem; line-height: 1.25;
+  }
+  .card-stats {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    margin-bottom: 0.9rem;
+  }
+  .card-stat {
+    font-size: 0.78rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .card-stat svg { opacity: 0.6; }
+  .card-footer-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: auto; padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+  .card-price { display: flex; flex-direction: column; }
+  .price-from { font-size: 0.68rem; color: var(--text-muted); }
+  .price-val {
+    font-size: 1.1rem; font-weight: 500;
+    font-family: 'DM Serif Display', serif;
+    color: var(--brand-dark);
+  }
+  .btn-card-book {
+    background: var(--brand); color: #fff;
+    border: none; border-radius: 8px;
+    padding: 0.45rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s; text-decoration: none;
+  }
+  .btn-card-book:hover { background: var(--brand-dark); color: #fff; }
+  .card-rating {
+    position: absolute; bottom: 10px; right: 10px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 20px;
+    font-size: 0.75rem; font-weight: 500;
+    padding: 0.22rem 0.6rem;
+    display: flex; align-items: center; gap: 0.25rem;
+    backdrop-filter: blur(4px);
+  }
+  .card-rating svg { color: #f59e0b; }
+
+  /* ── AVAILABILITY PILL ── */
+  .avail-pill {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.7rem; padding: 0.2rem 0.55rem;
+    border-radius: 20px; margin-bottom: 0.6rem;
+    width: fit-content;
+  }
+  .avail-green { background: #dcfce7; color: #166534; }
+  .avail-yellow { background: #fef3c7; color: #92400e; }
+  .avail-red { background: #fee2e2; color: #991b1b; }
+  .avail-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── FEATURED BANNER ── */
+  .featured-banner {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 100%);
+    border-radius: var(--card-radius);
+    padding: 2.5rem;
+    color: #fff;
+    margin-bottom: 2rem;
+    position: relative; overflow: hidden;
+  }
+  .featured-banner::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .featured-banner::after {
+    content: '';
+    position: absolute; bottom: -60px; right: 80px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .featured-banner .fb-tag {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.6); margin-bottom: 0.5rem;
+  }
+  .featured-banner h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem; margin-bottom: 0.5rem;
+  }
+  .featured-banner p {
+    font-size: 0.88rem; color: rgba(255,255,255,0.75);
+    max-width: 380px; line-height: 1.6; margin-bottom: 1.25rem;
+  }
+  .btn-fb {
+    background: #fff; color: var(--brand-dark);
+    border: none; border-radius: 8px;
+    padding: 0.55rem 1.3rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s; text-decoration: none;
+    display: inline-block;
+  }
+  .btn-fb:hover { opacity: 0.9; color: var(--brand-dark); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center; padding: 4rem 1rem;
+    display: none;
+  }
+  .empty-state h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem; margin-bottom: 0.5rem;
+  }
+  .empty-state p { font-size: 0.88rem; color: var(--text-muted); }
+
+  /* ── LOAD MORE ── */
+  .load-more-wrap { text-align: center; margin-top: 2rem; }
+  .btn-load-more {
+    border: 1px solid var(--border); background: #fff;
+    border-radius: 9px; padding: 0.65rem 2rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+    color: var(--text-main); cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn-load-more:hover { background: var(--bg); border-color: var(--brand); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .carousel-item { height: 340px; }
+    .carousel-overlay { padding: 1.75rem; }
+    .carousel-overlay h2 { font-size: 1.9rem; }
+    .filter-bar { top: 56px; }
+  }
+  @media (max-width: 576px) {
+    .carousel-item { height: 280px; }
+    .carousel-overlay h2 { font-size: 1.5rem; }
+    .carousel-overlay p { display: none; }
+    .result-count { display: none; }
+  }
+
+  /* Stagger card animation */
+  .trek-card-wrap {
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .trek-card-wrap:nth-child(1) { animation-delay: 0.05s; }
+  .trek-card-wrap:nth-child(2) { animation-delay: 0.10s; }
+  .trek-card-wrap:nth-child(3) { animation-delay: 0.15s; }
+  .trek-card-wrap:nth-child(4) { animation-delay: 0.20s; }
+  .trek-card-wrap:nth-child(5) { animation-delay: 0.25s; }
+  .trek-card-wrap:nth-child(6) { animation-delay: 0.30s; }
+</style>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold text-success" href="/">GreenTrail</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-center gap-2">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/treks">Explore Treks</a></li>
-          <li class="nav-item"><a class="nav-link" href="/my-bookings">My Bookings</a></li>
-          <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<body>
 
-  <main class="container py-5">
-    <div class="row gx-4 align-items-center mb-5">
-      <div class="col-lg-7">
-        <h1 class="display-6 fw-bold">Find the perfect trek for your next getaway</h1>
-        <p class="lead text-muted">Use the interactive filter ribbon and preview top difficulty categories in the carousel below.</p>
-      </div>
-      <div class="col-lg-5">
-        <div id="trekFilterCarousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner rounded-4 shadow-sm overflow-hidden bg-white">
-            <div class="carousel-item active">
-              <div class="p-4">
-                <h5 class="text-success fw-semibold">Easy Treks</h5>
-                <p class="text-muted mb-0">Beginner-friendly routes with relaxing camp stays.</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="p-4">
-                <h5 class="text-success fw-semibold">Moderate Treks</h5>
-                <p class="text-muted mb-0">Balanced journeys for explorers who want more challenge.</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="p-4">
-                <h5 class="text-success fw-semibold">Difficult & Extreme</h5>
-                <p class="text-muted mb-0">For adventurers seeking an intense, scenic experience.</p>
-              </div>
-            </div>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#">Trek<em>&</em>Camp</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-1">
+        <li class="nav-item"><a class="nav-link active-link" href="#">Treks</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Camps</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Guides</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">My Bookings</a></li>
+        <li class="nav-item"><a class="nav-link btn-nav-book ms-2" href="#">Book Now</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO CAROUSEL -->
+<div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+  </div>
+
+  <div class="carousel-inner">
+    <!-- Slide 1 -->
+    <div class="carousel-item active">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=80" alt="Kedarkantha">
+      <div class="carousel-overlay">
+        <div class="container">
+          <span class="slide-tag">Featured Trek · Moderate</span>
+          <h2>Kedarkantha Trek</h2>
+          <p>Summit a Himalayan peak at 3,810 m through dense pine forests and frozen meadows. India's most loved winter trek.</p>
+          <div class="slide-meta">
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Uttarakhand
+            </span>
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              6 Days
+            </span>
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.9 Rating
+            </span>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#trekFilterCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#trekFilterCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
+          <a href="trek_detail.html" class="btn-slide-cta">
+            View Trek
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
         </div>
       </div>
     </div>
 
-    <section class="mb-4">
-      <div class="d-flex flex-wrap gap-2 mb-3">
-        <button class="btn btn-outline-success filter-link" data-difficulty="">All</button>
-        <button class="btn btn-outline-success filter-link" data-difficulty="Easy">Easy</button>
-        <button class="btn btn-outline-success filter-link" data-difficulty="Moderate">Moderate</button>
-        <button class="btn btn-outline-success filter-link" data-difficulty="Difficult">Difficult</button>
-        <button class="btn btn-outline-success filter-link" data-difficulty="Extreme">Extreme</button>
+    <!-- Slide 2 -->
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=1400&q=80" alt="Valley of Flowers">
+      <div class="carousel-overlay">
+        <div class="container">
+          <span class="slide-tag">UNESCO Heritage · Easy</span>
+          <h2>Valley of Flowers</h2>
+          <p>Walk through a UNESCO World Heritage site — a vast expanse of alpine wildflowers in full bloom during monsoon season.</p>
+          <div class="slide-meta">
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Uttarakhand
+            </span>
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              7 Days
+            </span>
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.8 Rating
+            </span>
+          </div>
+          <a href="#" class="btn-slide-cta">
+            View Trek
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
       </div>
-    </section>
+    </div>
 
-    <div class="row g-4">
-      {% if treks %}
-        {% for trek in treks %}
-          <div class="col-md-6">
-            <div class="card border-0 shadow-sm h-100">
-              <div class="card-body">
-                <span class="badge bg-success bg-opacity-15 text-success mb-2">{{ trek.Difficulty_Level }}</span>
-                <h5 class="card-title">{{ trek.Trek_Name }}</h5>
-                <p class="text-muted mb-2">₹{{ trek.Price }} • {{ trek.StartDate }} — {{ trek.EndDate }}</p>
-                <p class="mb-3 text-body-secondary">Available slots: <strong>{{ trek.Available_Slots }}</strong></p>
-                <a href="/trek/{{ trek.InstanceID }}" class="btn btn-sm btn-success">View Details</a>
-              </div>
+    <!-- Slide 3 -->
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=1400&q=80" alt="Hampta Pass">
+      <div class="carousel-overlay">
+        <div class="container">
+          <span class="slide-tag">Adventure Classic · Difficult</span>
+          <h2>Hampta Pass</h2>
+          <p>Cross from the lush Kullu Valley into the stark moonscape of Spiti — a dramatic contrast that stays with you forever.</p>
+          <div class="slide-meta">
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Himachal Pradesh
+            </span>
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              5 Days
+            </span>
+            <span>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.7 Rating
+            </span>
+          </div>
+          <a href="#" class="btn-slide-cta">
+            View Trek
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-control-prev d-flex" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next d-flex" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="container">
+    <div class="filter-wrap">
+      <span class="filter-label">Filter:</span>
+
+      <button class="filter-chip active" data-filter="all">All Treks</button>
+      <button class="filter-chip" data-filter="Easy">Easy</button>
+      <button class="filter-chip" data-filter="Moderate">Moderate</button>
+      <button class="filter-chip" data-filter="Difficult">Difficult</button>
+      <button class="filter-chip" data-filter="Extreme">Extreme</button>
+
+      <select class="filter-select" id="sortSelect">
+        <option value="default">Sort: Recommended</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="duration-asc">Duration: Short First</option>
+        <option value="rating">Highest Rated</option>
+      </select>
+
+      <select class="filter-select" id="regionSelect">
+        <option value="all">All Regions</option>
+        <option value="Uttarakhand">Uttarakhand</option>
+        <option value="Himachal Pradesh">Himachal Pradesh</option>
+        <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+        <option value="Sikkim">Sikkim</option>
+      </select>
+
+      <div class="result-count" id="resultCount"><span>8</span> treks found</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="treks-section">
+  <div class="container">
+
+    <!-- FEATURED BANNER -->
+    <div class="featured-banner">
+      <div class="fb-tag">Summer 2026 · Limited Slots</div>
+      <h3>Book Early, Trek Better</h3>
+      <p>Peak season batches are filling up fast. Secure your spot on Kedarkantha, Valley of Flowers, or Hampta Pass before they're gone.</p>
+      <a href="#treks-grid" class="btn-fb">Browse All Treks</a>
+    </div>
+
+    <!-- GRID HEADING -->
+    <div class="mb-3">
+      <div class="section-eyebrow">All Treks</div>
+      <h2 class="section-heading">Find Your Next Adventure</h2>
+    </div>
+
+    <!-- TREK CARDS GRID -->
+    <div class="row g-4" id="treksGrid">
+
+      <!-- Card 1 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Moderate" data-region="Uttarakhand" data-price="8500" data-duration="6" data-rating="4.9">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=75" alt="Kedarkantha Trek">
+            <span class="card-badge-diff diff-moderate">Moderate</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.9
             </div>
           </div>
-        {% endfor %}
-      {% else %}
-        <div class="col-12">
-          <div class="card border-0 shadow-sm p-4">
-            <p class="mb-0">No treks match your filter. Try another category.</p>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Uttarakhand
+            </div>
+            <h3 class="card-title">Kedarkantha Trek</h3>
+            <div class="avail-pill avail-yellow">
+              <div class="avail-dot" style="background:#f59e0b;"></div>
+              Only 6 spots left
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                6 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                3,810 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 18
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹8,500</span>
+              </div>
+              <a href="trek_detail.html" class="btn-card-book">View & Book</a>
+            </div>
           </div>
         </div>
-      {% endif %}
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Easy" data-region="Uttarakhand" data-price="11500" data-duration="7" data-rating="4.8">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&q=75" alt="Valley of Flowers">
+            <span class="card-badge-diff diff-easy">Easy</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.8
+            </div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Uttarakhand
+            </div>
+            <h3 class="card-title">Valley of Flowers</h3>
+            <div class="avail-pill avail-green">
+              <div class="avail-dot" style="background:#16a34a;"></div>
+              Slots available
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                7 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                3,658 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 20
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹11,500</span>
+              </div>
+              <a href="#" class="btn-card-book">View & Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Difficult" data-region="Himachal Pradesh" data-price="9800" data-duration="5" data-rating="4.7">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=600&q=75" alt="Hampta Pass">
+            <span class="card-badge-diff diff-difficult">Difficult</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.7
+            </div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Himachal Pradesh
+            </div>
+            <h3 class="card-title">Hampta Pass</h3>
+            <div class="avail-pill avail-yellow">
+              <div class="avail-dot" style="background:#f59e0b;"></div>
+              8 spots left
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                5 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                4,270 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 15
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹9,800</span>
+              </div>
+              <a href="#" class="btn-card-book">View & Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Moderate" data-region="Uttarakhand" data-price="7500" data-duration="4" data-rating="4.6">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75" alt="Chopta Chandrashila">
+            <span class="card-badge-diff diff-moderate">Moderate</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.6
+            </div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Uttarakhand
+            </div>
+            <h3 class="card-title">Chopta Chandrashila</h3>
+            <div class="avail-pill avail-green">
+              <div class="avail-dot" style="background:#16a34a;"></div>
+              Slots available
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                4 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                4,000 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 20
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹7,500</span>
+              </div>
+              <a href="#" class="btn-card-book">View & Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Difficult" data-region="Jammu & Kashmir" data-price="18500" data-duration="9" data-rating="4.9">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=75" alt="Kashmir Great Lakes">
+            <span class="card-badge-diff diff-difficult">Difficult</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.9
+            </div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Jammu & Kashmir
+            </div>
+            <h3 class="card-title">Kashmir Great Lakes</h3>
+            <div class="avail-pill avail-red">
+              <div class="avail-dot" style="background:#dc2626;"></div>
+              Almost full · 3 left
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                9 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                4,191 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 12
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹18,500</span>
+              </div>
+              <a href="#" class="btn-card-book">View & Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Easy" data-region="Himachal Pradesh" data-price="6200" data-duration="3" data-rating="4.5">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=75" alt="Triund Trek">
+            <span class="card-badge-diff diff-easy">Easy</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.5
+            </div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Himachal Pradesh
+            </div>
+            <h3 class="card-title">Triund Trek</h3>
+            <div class="avail-pill avail-green">
+              <div class="avail-dot" style="background:#16a34a;"></div>
+              Slots available
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                3 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                2,828 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 25
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹6,200</span>
+              </div>
+              <a href="#" class="btn-card-book">View & Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Extreme" data-region="Sikkim" data-price="32000" data-duration="12" data-rating="5.0">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&q=75" alt="Goecha La Trek">
+            <span class="card-badge-diff diff-extreme">Extreme</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              5.0
+            </div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Sikkim
+            </div>
+            <h3 class="card-title">Goecha La Trek</h3>
+            <div class="avail-pill avail-yellow">
+              <div class="avail-dot" style="background:#f59e0b;"></div>
+              5 spots left
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                12 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                4,940 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 10
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹32,000</span>
+              </div>
+              <a href="#" class="btn-card-book">View & Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="col-md-6 col-lg-4 trek-card-wrap" data-difficulty="Moderate" data-region="Uttarakhand" data-price="13500" data-duration="8" data-rating="4.7">
+        <div class="trek-card">
+          <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=600&q=75" alt="Roopkund Trek">
+            <span class="card-badge-diff diff-moderate">Moderate</span>
+            <button class="card-wishlist" onclick="toggleWish(this)">
+              <svg width="14" height="14" fill="none" stroke="#555" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="card-rating">
+              <svg width="11" height="11" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              4.7
+            </div>
+          </div>
+          <div class="card-body-inner">
+            <div class="card-location">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Uttarakhand
+            </div>
+            <h3 class="card-title">Roopkund Trek</h3>
+            <div class="avail-pill avail-green">
+              <div class="avail-dot" style="background:#16a34a;"></div>
+              Slots available
+            </div>
+            <div class="card-stats">
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                8 Days
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+                5,029 m
+              </span>
+              <span class="card-stat">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Max 15
+              </span>
+            </div>
+            <div class="card-footer-inner">
+              <div class="card-price">
+                <span class="price-from">From</span>
+                <span class="price-val">₹13,500</span>
+              </div>
+              <a href="#" class="btn-card-book">View & Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /treksGrid -->
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState">
+      <h4>No treks found</h4>
+      <p>Try changing your filters or region selection.</p>
     </div>
-  </main>
 
-  <footer class="bg-white py-4 shadow-sm">
-    <div class="container text-center text-muted">&copy; 2026 GreenTrail</div>
-  </footer>
+    <!-- LOAD MORE -->
+    <div class="load-more-wrap" id="loadMoreWrap">
+      <button class="btn-load-more">Load More Treks</button>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qXaMeVt1LIZXnG/kZPw4bFn1ox78WolMIpTjN/2rXjzPJGw2EAWac2cPIu2sHfX7" crossorigin="anonymous"></script>
-  <script src="/static/js/app.js"></script>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Filter logic
+  const chips = document.querySelectorAll('.filter-chip');
+  const cards = document.querySelectorAll('#treksGrid .trek-card-wrap');
+  const resultCount = document.getElementById('resultCount').querySelector('span');
+  const emptyState = document.getElementById('emptyState');
+  const sortSel = document.getElementById('sortSelect');
+  const regionSel = document.getElementById('regionSelect');
+  const grid = document.getElementById('treksGrid');
+
+  let currentDiff = 'all';
+  let currentRegion = 'all';
+  let currentSort = 'default';
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentDiff = chip.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  sortSel.addEventListener('change', () => {
+    currentSort = sortSel.value;
+    applyFilters();
+  });
+
+  regionSel.addEventListener('change', () => {
+    currentRegion = regionSel.value;
+    applyFilters();
+  });
+
+  function applyFilters() {
+    let visible = [];
+    cards.forEach(card => {
+      const diff = card.dataset.difficulty;
+      const region = card.dataset.region;
+      const matchDiff = currentDiff === 'all' || diff === currentDiff;
+      const matchRegion = currentRegion === 'all' || region === currentRegion;
+      if (matchDiff && matchRegion) {
+        card.style.display = '';
+        visible.push(card);
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Sort
+    const sortedCards = [...visible];
+    if (currentSort === 'price-asc') {
+      sortedCards.sort((a, b) => +a.dataset.price - +b.dataset.price);
+    } else if (currentSort === 'price-desc') {
+      sortedCards.sort((a, b) => +b.dataset.price - +a.dataset.price);
+    } else if (currentSort === 'duration-asc') {
+      sortedCards.sort((a, b) => +a.dataset.duration - +b.dataset.duration);
+    } else if (currentSort === 'rating') {
+      sortedCards.sort((a, b) => +b.dataset.rating - +a.dataset.rating);
+    }
+    sortedCards.forEach(card => grid.appendChild(card));
+
+    resultCount.textContent = visible.length;
+    emptyState.style.display = visible.length === 0 ? 'block' : 'none';
+    document.getElementById('loadMoreWrap').style.display = visible.length === 0 ? 'none' : 'block';
+  }
+
+  function toggleWish(btn) {
+    btn.classList.toggle('wished');
+    const svg = btn.querySelector('svg');
+    if (btn.classList.contains('wished')) {
+      svg.setAttribute('fill', '#ef4444');
+      svg.setAttribute('stroke', '#ef4444');
+    } else {
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', '#555');
+    }
+  }
+</script>
 </body>
 </html>
