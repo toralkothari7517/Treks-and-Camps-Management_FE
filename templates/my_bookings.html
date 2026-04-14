@@ -1,68 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Bookings</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-C8jQGZ9Rg7uWe6EmxRqnCqSApGxN4P0qPbrIk1H7vHWv+G1AVnWp0B9WFGx0eN9I" crossorigin="anonymous" />
-  <link rel="stylesheet" href="/static/css/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Bookings – Trek&Camp</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--brand:#1a6b4a;--brand-light:#e8f5ee;--brand-dark:#0f4a32;--text-main:#1c1c1c;--text-muted:#6b7280;--border:#e5e7eb;--bg:#f9f9f7;--radius:12px;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;color:var(--text-main);background:var(--bg);}
+  .navbar{background:#fff;border-bottom:1px solid var(--border);padding:.85rem 0;}
+  .navbar-brand{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--brand-dark)!important;}
+  .navbar-brand em{color:var(--brand);font-style:normal;}
+  .nav-link{font-size:.875rem;color:var(--text-muted)!important;padding:.4rem .9rem!important;transition:color .15s;}
+  .nav-link:hover{color:var(--brand-dark)!important;}
+  .nav-link.active-link{color:var(--brand-dark)!important;font-weight:500;}
+
+  /* PAGE HEADER */
+  .page-header{background:#fff;border-bottom:1px solid var(--border);padding:1.75rem 0;}
+  .page-header h1{font-family:'DM Serif Display',serif;font-size:1.75rem;letter-spacing:-.3px;margin-bottom:.2rem;}
+  .page-header p{font-size:.88rem;color:var(--text-muted);}
+
+  /* STAT PILLS */
+  .stat-pills{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem;}
+  .stat-pill{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:.35rem .9rem;font-size:.8rem;color:var(--text-muted);cursor:pointer;transition:all .15s;}
+  .stat-pill:hover,.stat-pill.active{background:var(--brand-light);border-color:var(--brand);color:var(--brand-dark);}
+  .stat-pill .count{font-weight:500;margin-left:.3rem;}
+
+  /* MAIN */
+  .main{padding:2rem 0 4rem;}
+
+  /* BOOKING CARD */
+  .booking-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;display:flex;transition:box-shadow .2s;}
+  .booking-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);}
+  .bc-img{width:170px;flex-shrink:0;object-fit:cover;}
+  .bc-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;}
+  .bc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.6rem;gap:.5rem;}
+  .bc-title{font-family:'DM Serif Display',serif;font-size:1.1rem;letter-spacing:-.2px;}
+  .bc-id{font-size:.72rem;color:var(--text-muted);margin-top:.15rem;}
+  .badge-status{display:inline-block;font-size:.72rem;font-weight:500;padding:.28rem .7rem;border-radius:20px;white-space:nowrap;}
+  .badge-confirmed{background:#dcfce7;color:#166534;}
+  .badge-pending{background:#fef3c7;color:#92400e;}
+  .badge-cancelled{background:#fee2e2;color:#991b1b;}
+  .badge-completed{background:#e0e7ff;color:#3730a3;}
+  .bc-meta{display:flex;gap:1.1rem;flex-wrap:wrap;font-size:.8rem;color:var(--text-muted);margin-bottom:.85rem;}
+  .bc-meta span{display:flex;align-items:center;gap:.3rem;}
+  .bc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.85rem;border-top:1px solid var(--border);}
+  .bc-price{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--brand-dark);}
+  .bc-price span{font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--text-muted);font-weight:400;display:block;}
+  .bc-actions{display:flex;gap:.5rem;}
+  .btn-sm-view{background:var(--brand);color:#fff;border:none;border-radius:7px;padding:.4rem .9rem;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;cursor:pointer;text-decoration:none;transition:background .15s;}
+  .btn-sm-view:hover{background:var(--brand-dark);color:#fff;}
+  .btn-sm-outline{background:#fff;color:var(--text-main);border:1px solid var(--border);border-radius:7px;padding:.4rem .9rem;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;text-decoration:none;transition:background .15s;}
+  .btn-sm-outline:hover{background:var(--bg);}
+
+  /* DAYS LEFT PILL */
+  .days-pill{font-size:.72rem;padding:.2rem .6rem;border-radius:20px;font-weight:500;}
+  .days-soon{background:#fef3c7;color:#92400e;}
+  .days-far{background:var(--brand-light);color:var(--brand-dark);}
+
+  /* EMPTY STATE */
+  .empty-state{text-align:center;padding:4rem 1rem;display:none;}
+  .empty-icon{width:64px;height:64px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;}
+  .empty-state h4{font-family:'DM Serif Display',serif;font-size:1.25rem;margin-bottom:.4rem;}
+  .empty-state p{font-size:.85rem;color:var(--text-muted);margin-bottom:1.1rem;}
+  .btn-browse{background:var(--brand);color:#fff;border:none;border-radius:9px;padding:.6rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;text-decoration:none;display:inline-block;}
+
+  /* SIDEBAR */
+  .profile-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem;}
+  .profile-avatar{width:60px;height:60px;border-radius:50%;background:var(--brand-light);color:var(--brand-dark);font-family:'DM Serif Display',serif;font-size:1.4rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+  .profile-name{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.2rem;}
+  .profile-email{font-size:.82rem;color:var(--text-muted);}
+  .profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1rem;}
+  .ps-item{background:var(--bg);border-radius:8px;padding:.6rem .75rem;text-align:center;}
+  .ps-val{font-family:'DM Serif Display',serif;font-size:1.2rem;}
+  .ps-lbl{font-size:.68rem;color:var(--text-muted);}
+  .quick-link{display:flex;align-items:center;gap:.6rem;padding:.5rem 0;font-size:.85rem;color:var(--text-main);text-decoration:none;border-bottom:1px solid var(--border);transition:color .15s;}
+  .quick-link:last-child{border-bottom:none;}
+  .quick-link:hover{color:var(--brand);}
+  .quick-link svg{opacity:.55;}
+
+  @media(max-width:640px){
+    .booking-card{flex-direction:column;}
+    .bc-img{width:100%;height:150px;}
+  }
+</style>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold text-success" href="/">GreenTrail</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-center gap-2">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/treks">Available Treks</a></li>
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/my-bookings">My Bookings</a></li>
-          <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<body>
 
-  <main class="container py-5">
-    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
-      <h1 class="fw-bold text-success">My Bookings</h1>
-      <form class="row g-3 mt-3" action="/my-bookings" method="get">
-        <div class="col-md-8">
-          <label for="participant_id" class="form-label">Participant ID</label>
-          <input id="participant_id" name="participant_id" type="text" class="form-control" value="{{ participant_id }}" placeholder="e.g. PRT001" />
-        </div>
-        <div class="col-md-4 d-flex align-items-end">
-          <button type="submit" class="btn btn-success w-100">Search</button>
-        </div>
-      </form>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Trek<em>&</em>Camp</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="treks.html">Treks</a></li>
+        <li class="nav-item"><a class="nav-link active-link" href="my_bookings.html">My Bookings</a></li>
+        <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
+      </ul>
     </div>
+  </div>
+</nav>
 
-    {% if bookings %}
-      <div class="row g-4">
-        {% for booking in bookings %}
-          <div class="col-md-6">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-              <h5 class="fw-semibold">Booking {{ booking.BookingID }}</h5>
-              <p class="text-muted mb-1">Status: {{ booking.Status }}</p>
-              <p class="mb-1">Amount: ₹{{ booking.Total_Amount }}</p>
-              <p class="mb-3">Participants: {{ booking.Number_of_Participants }}</p>
-              <a href="/booking/{{ booking.BookingID }}" class="btn btn-sm btn-success">View Details</a>
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <h1>My Bookings</h1>
+    <p>Track your upcoming, completed, and cancelled treks.</p>
+    <div class="stat-pills">
+      <button class="stat-pill active" data-filter="all">All <span class="count">4</span></button>
+      <button class="stat-pill" data-filter="Confirmed">Upcoming <span class="count">2</span></button>
+      <button class="stat-pill" data-filter="Completed">Completed <span class="count">1</span></button>
+      <button class="stat-pill" data-filter="Cancelled">Cancelled <span class="count">1</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- BOOKINGS LIST -->
+      <div class="col-lg-8" id="bookingsList">
+
+        <!-- Booking 1 – Confirmed -->
+        <div class="booking-card" data-status="Confirmed">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=300&q=75" alt="Kedarkantha" class="bc-img">
+          <div class="bc-body">
+            <div class="bc-top">
+              <div>
+                <div class="bc-title">Kedarkantha Trek</div>
+                <div class="bc-id">BKG001 · Booked Apr 10, 2026</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;">
+                <span class="badge-confirmed">Confirmed</span>
+                <span class="days-pill days-soon">60 days away</span>
+              </div>
+            </div>
+            <div class="bc-meta">
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jun 14 – Jun 20, 2026</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Uttarakhand</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>2 Participants</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6 Days</span>
+            </div>
+            <div class="bc-footer">
+              <div class="bc-price"><span>Total Paid</span>₹17,850</div>
+              <div class="bc-actions">
+                <a href="#" class="btn-sm-outline">Download Ticket</a>
+                <a href="booking_detail.html" class="btn-sm-view">View Details</a>
+              </div>
             </div>
           </div>
-        {% endfor %}
-      </div>
-    {% elif participant_id %}
-      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-        <p class="mb-0">No bookings found for that participant.</p>
-      </div>
-    {% endif %}
-  </main>
+        </div>
 
-  <footer class="bg-white py-4 shadow-sm">
-    <div class="container text-center text-muted">&copy; 2026 GreenTrail</div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qXaMeVt1LIZXnG/kZPw4bFn1ox78WolMIpTjN/2rXjzPJGw2EAWac2cPIu2sHfX7" crossorigin="anonymous"></script>
+        <!-- Booking 2 – Confirmed -->
+        <div class="booking-card" data-status="Confirmed">
+          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300&q=75" alt="Kashmir Great Lakes" class="bc-img">
+          <div class="bc-body">
+            <div class="bc-top">
+              <div>
+                <div class="bc-title">Kashmir Great Lakes</div>
+                <div class="bc-id">BKG003 · Booked Mar 22, 2026</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;">
+                <span class="badge-confirmed">Confirmed</span>
+                <span class="days-pill days-far">112 days away</span>
+              </div>
+            </div>
+            <div class="bc-meta">
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Aug 5 – Aug 13, 2026</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Jammu & Kashmir</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>1 Participant</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>9 Days</span>
+            </div>
+            <div class="bc-footer">
+              <div class="bc-price"><span>Total Paid</span>₹19,425</div>
+              <div class="bc-actions">
+                <a href="#" class="btn-sm-outline">Download Ticket</a>
+                <a href="booking_detail.html" class="btn-sm-view">View Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking 3 – Completed -->
+        <div class="booking-card" data-status="Completed">
+          <img src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=300&q=75" alt="Valley of Flowers" class="bc-img" style="filter:grayscale(30%);">
+          <div class="bc-body">
+            <div class="bc-top">
+              <div>
+                <div class="bc-title">Valley of Flowers</div>
+                <div class="bc-id">BKG005 · Booked Jan 5, 2026</div>
+              </div>
+              <span class="badge-completed">Completed</span>
+            </div>
+            <div class="bc-meta">
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 20 – Feb 26, 2026</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Uttarakhand</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>2 Participants</span>
+              <span style="color:#f59e0b;">★★★★★ Rated</span>
+            </div>
+            <div class="bc-footer">
+              <div class="bc-price"><span>Total Paid</span>₹24,150</div>
+              <div class="bc-actions">
+                <a href="booking_detail.html" class="btn-sm-view">View Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking 4 – Cancelled -->
+        <div class="booking-card" data-status="Cancelled" style="opacity:.7;">
+          <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=300&q=75" alt="Hampta Pass" class="bc-img" style="filter:grayscale(60%);">
+          <div class="bc-body">
+            <div class="bc-top">
+              <div>
+                <div class="bc-title">Hampta Pass</div>
+                <div class="bc-id">BKG006 · Booked Dec 12, 2025</div>
+              </div>
+              <span class="badge-cancelled">Cancelled</span>
+            </div>
+            <div class="bc-meta">
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan 15 – Jan 20, 2026</span>
+              <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Himachal Pradesh</span>
+              <span style="color:#dc2626;font-size:.78rem;">Cancelled by user · Jan 8, 2026</span>
+            </div>
+            <div class="bc-footer">
+              <div class="bc-price"><span>Refunded</span>₹9,800</div>
+              <div class="bc-actions">
+                <a href="booking_detail.html" class="btn-sm-outline">View Details</a>
+                <a href="treks.html" class="btn-sm-view">Book Again</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">
+            <svg width="26" height="26" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+          </div>
+          <h4>No bookings found</h4>
+          <p>You don't have any bookings in this category yet.</p>
+          <a href="treks.html" class="btn-browse">Browse Treks</a>
+        </div>
+
+      </div><!-- /bookings col -->
+
+      <!-- SIDEBAR -->
+      <div class="col-lg-4">
+
+        <!-- PROFILE -->
+        <div class="profile-card">
+          <div class="profile-avatar">AS</div>
+          <div class="profile-name">Ananya Sharma</div>
+          <div class="profile-email">ananya@example.com</div>
+          <div class="profile-stats">
+            <div class="ps-item"><div class="ps-val">4</div><div class="ps-lbl">Total Bookings</div></div>
+            <div class="ps-item"><div class="ps-val">2</div><div class="ps-lbl">Treks Done</div></div>
+            <div class="ps-item"><div class="ps-val">4.9★</div><div class="ps-lbl">Avg. Rating Given</div></div>
+            <div class="ps-item"><div class="ps-val">₹69K</div><div class="ps-lbl">Total Spent</div></div>
+          </div>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="profile-card">
+          <h6 style="font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:.75rem;">Quick Links</h6>
+          <a href="treks.html" class="quick-link">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
+            Browse Treks
+          </a>
+          <a href="trek_detail.html" class="quick-link">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search Availability
+          </a>
+          <a href="#" class="quick-link">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download All E-Tickets
+          </a>
+          <a href="#" class="quick-link">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+            Edit Profile
+          </a>
+          <a href="login.html" class="quick-link">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.querySelectorAll('.stat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.stat-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.dataset.filter;
+      let visible = 0;
+      document.querySelectorAll('.booking-card').forEach(card => {
+        const show = filter === 'all' || card.dataset.status === filter;
+        card.style.display = show ? 'flex' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+    });
+  });
+</script>
 </body>
 </html>
