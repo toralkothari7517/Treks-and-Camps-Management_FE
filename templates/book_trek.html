@@ -1,79 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Book Trek</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-C8jQGZ9Rg7uWe6EmxRqnCqSApGxN4P0qPbrIk1H7vHWv+G1AVnWp0B9WFGx0eN9I" crossorigin="anonymous" />
-  <link rel="stylesheet" href="/static/css/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Trek – Trek&Camp</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --brand:#1a6b4a; --brand-light:#e8f5ee; --brand-dark:#0f4a32; --text-main:#1c1c1c; --text-muted:#6b7280; --border:#e5e7eb; --bg:#f9f9f7; --radius:12px; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;color:var(--text-main);background:var(--bg);}
+  .navbar{background:#fff;border-bottom:1px solid var(--border);padding:.85rem 0;}
+  .navbar-brand{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--brand-dark)!important;}
+  .navbar-brand em{color:var(--brand);font-style:normal;}
+  .nav-link{font-size:.875rem;color:var(--text-muted)!important;padding:.4rem .9rem!important;}
+  .nav-link:hover{color:var(--brand-dark)!important;}
+  .breadcrumb-bar{background:#fff;border-bottom:1px solid var(--border);padding:.65rem 0;}
+  .breadcrumb{margin:0;font-size:.8rem;}
+  .breadcrumb-item a{color:var(--brand);text-decoration:none;}
+  .breadcrumb-item.active{color:var(--text-muted);}
+
+  /* STEPS HEADER */
+  .steps-bar{background:#fff;border-bottom:1px solid var(--border);padding:1.1rem 0;}
+  .step-item{display:flex;align-items:center;gap:.6rem;font-size:.82rem;color:var(--text-muted);}
+  .step-item.active{color:var(--brand-dark);}
+  .step-item.done{color:var(--brand);}
+  .step-circle{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:500;flex-shrink:0;}
+  .step-item.active .step-circle{background:var(--brand);border-color:var(--brand);color:#fff;}
+  .step-item.done .step-circle{background:var(--brand-light);border-color:var(--brand);color:var(--brand-dark);}
+  .step-sep{flex:1;height:1px;background:var(--border);margin:0 .5rem;}
+  .step-sep.done{background:var(--brand);}
+
+  /* MAIN */
+  .main{padding:2rem 0 4rem;}
+  .card-clean{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem;}
+  .card-title-sm{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:1.1rem;}
+  label{font-size:.78rem;color:var(--text-muted);font-weight:500;display:block;margin-bottom:.35rem;}
+  input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:.58rem .85rem;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .15s;background:#fff;color:var(--text-main);}
+  input:focus,select:focus,textarea:focus{border-color:var(--brand);}
+  textarea{resize:vertical;min-height:80px;}
+
+  /* PARTICIPANT ROW */
+  .participant-block{border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:.85rem;position:relative;}
+  .participant-block .block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;}
+  .participant-block .block-title{font-size:.85rem;font-weight:500;}
+  .role-badge{font-size:.68rem;padding:.2rem .55rem;border-radius:20px;background:var(--brand-light);color:var(--brand-dark);}
+  .btn-remove-p{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:.8rem;padding:.2rem .4rem;border-radius:6px;transition:color .15s,background .15s;}
+  .btn-remove-p:hover{color:#dc2626;background:#fee2e2;}
+  .btn-add-participant{display:flex;align-items:center;gap:.5rem;background:var(--brand-light);color:var(--brand-dark);border:1px dashed var(--brand);border-radius:8px;padding:.6rem 1rem;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:500;cursor:pointer;width:100%;justify-content:center;transition:background .15s;}
+  .btn-add-participant:hover{background:#d4ede0;}
+
+  /* PAYMENT */
+  .payment-method-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;}
+  .pay-opt{border:1px solid var(--border);border-radius:9px;padding:.75rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.65rem;transition:all .15s;}
+  .pay-opt:hover{border-color:var(--brand);}
+  .pay-opt.selected{border-color:var(--brand);background:var(--brand-light);}
+  .pay-opt input[type=radio]{accent-color:var(--brand);width:16px;height:16px;flex-shrink:0;}
+  .pay-opt-label{font-size:.83rem;font-weight:500;}
+  .pay-opt-sub{font-size:.72rem;color:var(--text-muted);}
+  .pay-icon{width:32px;height:32px;border-radius:7px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+  /* SUMMARY SIDEBAR */
+  .summary-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:sticky;top:80px;}
+  .summary-header{background:var(--brand);padding:1.1rem 1.25rem;color:#fff;}
+  .summary-trek-name{font-family:'DM Serif Display',serif;font-size:1.05rem;}
+  .summary-meta{font-size:.78rem;opacity:.8;margin-top:.25rem;}
+  .summary-body{padding:1.25rem;}
+  .summary-img{width:100%;height:130px;object-fit:cover;border-radius:9px;margin-bottom:1rem;}
+  .fee-row{display:flex;justify-content:space-between;font-size:.83rem;margin-bottom:.45rem;}
+  .fee-row span:first-child{color:var(--text-muted);}
+  .fee-row.total{font-weight:500;font-size:.9rem;border-top:1px solid var(--border);padding-top:.6rem;margin-top:.3rem;}
+  .btn-confirm{display:block;width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:.8rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;transition:background .15s;margin-top:1rem;text-align:center;}
+  .btn-confirm:hover{background:var(--brand-dark);}
+  .guarantee{display:flex;align-items:flex-start;gap:.5rem;background:var(--brand-light);border-radius:8px;padding:.65rem .85rem;margin-top:.85rem;}
+  .guarantee svg{flex-shrink:0;margin-top:1px;}
+  .guarantee p{font-size:.75rem;color:var(--brand-dark);line-height:1.5;margin:0;}
+
+  /* CHECKLIST */
+  .checklist li{font-size:.83rem;color:#444;padding:.3rem 0;display:flex;align-items:flex-start;gap:.55rem;list-style:none;}
+  .checklist li svg{flex-shrink:0;margin-top:1px;color:var(--brand);}
+
+  /* SUCCESS STATE */
+  .success-overlay{display:none;position:fixed;inset:0;background:rgba(15,74,50,.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column;}
+  .success-overlay.show{display:flex;}
+  .success-box{background:#fff;border-radius:20px;padding:2.5rem;text-align:center;max-width:400px;width:90%;}
+  .success-icon{width:64px;height:64px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;}
+  .success-box h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;}
+  .success-box p{font-size:.88rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.25rem;}
+  .btn-go-bookings{display:inline-block;background:var(--brand);color:#fff;border-radius:9px;padding:.65rem 1.5rem;text-decoration:none;font-weight:500;font-size:.88rem;}
+</style>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold text-success" href="/">GreenTrail</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-center gap-2">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/treks">Available Treks</a></li>
-        </ul>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Trek<em>&</em>Camp</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="treks.html">Treks</a></li>
+        <li class="nav-item"><a class="nav-link" href="my_bookings.html">My Bookings</a></li>
+        <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="treks.html">Treks</a></li>
+      <li class="breadcrumb-item"><a href="trek_detail.html">Kedarkantha Trek</a></li>
+      <li class="breadcrumb-item active">Book</li>
+    </ol>
+  </div>
+</div>
+
+<!-- STEPS -->
+<div class="steps-bar">
+  <div class="container">
+    <div class="d-flex align-items-center">
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <span>Trek Selected</span>
+      </div>
+      <div class="step-sep done"></div>
+      <div class="step-item active">
+        <div class="step-circle">2</div>
+        <span>Participant Details</span>
+      </div>
+      <div class="step-sep"></div>
+      <div class="step-item">
+        <div class="step-circle">3</div>
+        <span>Payment</span>
+      </div>
+      <div class="step-sep"></div>
+      <div class="step-item">
+        <div class="step-circle">4</div>
+        <span>Confirmation</span>
       </div>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <main class="container py-5">
-    <div class="row justify-content-center">
+<!-- MAIN -->
+<div class="main">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- FORM COLUMN -->
       <div class="col-lg-8">
-        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-          <h1 class="fw-bold text-success">Book Trek</h1>
-          <p class="text-muted mb-4">Complete your booking request for instance <strong>{{ instance_id }}</strong>.</p>
-          <form method="post">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="name" class="form-label">Name</label>
-                <input id="name" name="name" type="text" class="form-control" required />
+
+        <!-- BATCH SELECTION -->
+        <div class="card-clean">
+          <h2 class="card-title-sm">Select Batch & Participants</h2>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label>Trek Batch / Departure Date</label>
+              <select id="batchSelect">
+                <option value="17000">Jun 14 – Jun 20, 2026 · 6 spots left</option>
+                <option value="17000">Jul 5 – Jul 11, 2026 · 12 spots left</option>
+                <option value="17000">Aug 10 – Aug 16, 2026 · 18 spots left</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label>Number of Participants</label>
+              <input type="number" id="numParticipants" min="1" max="6" value="2">
+            </div>
+            <div class="col-12">
+              <label>Special Requirements</label>
+              <textarea placeholder="Dietary restrictions, medical info, allergies, gear requests…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- PARTICIPANTS -->
+        <div class="card-clean">
+          <h2 class="card-title-sm">Participant Information</h2>
+          <div id="participantsContainer">
+            <!-- Participant 1 (Leader) -->
+            <div class="participant-block">
+              <div class="block-header">
+                <div class="block-title">Participant 1</div>
+                <span class="role-badge">Leader</span>
               </div>
-              <div class="col-md-6">
-                <label for="age" class="form-label">Age</label>
-                <input id="age" name="age" type="number" class="form-control" required />
-              </div>
-              <div class="col-md-6">
-                <label for="gender" class="form-label">Gender</label>
-                <select id="gender" name="gender" class="form-select" required>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="participants" class="form-label">Participants</label>
-                <input id="participants" name="participants" type="number" class="form-control" min="1" value="1" required />
-              </div>
-              <div class="col-md-6">
-                <label for="contact" class="form-label">Contact</label>
-                <input id="contact" name="contact" type="text" class="form-control" required />
-              </div>
-              <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
-                <input id="email" name="email" type="email" class="form-control" required />
-              </div>
-              <div class="col-12">
-                <label for="requirements" class="form-label">Special Requirements</label>
-                <textarea id="requirements" name="requirements" rows="4" class="form-control"></textarea>
+              <div class="row g-3">
+                <div class="col-md-6"><label>Full Name</label><input type="text" placeholder="As per ID proof"></div>
+                <div class="col-md-3"><label>Age</label><input type="number" min="10" max="70" placeholder="e.g. 26"></div>
+                <div class="col-md-3"><label>Gender</label><select><option>Male</option><option>Female</option><option>Other</option></select></div>
+                <div class="col-md-6"><label>Email</label><input type="email" placeholder="email@example.com"></div>
+                <div class="col-md-6"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
+                <div class="col-md-6"><label>Medical Conditions</label><input type="text" placeholder="None / Asthma / etc."></div>
+                <div class="col-md-6"><label>Emergency Contact</label><input type="tel" placeholder="+91 emergency number"></div>
               </div>
             </div>
-            <button type="submit" class="btn btn-success btn-lg mt-4">Submit Booking Request</button>
-          </form>
+            <!-- Participant 2 -->
+            <div class="participant-block">
+              <div class="block-header">
+                <div class="block-title">Participant 2</div>
+                <button class="btn-remove-p" onclick="removeParticipant(this)">✕ Remove</button>
+              </div>
+              <div class="row g-3">
+                <div class="col-md-6"><label>Full Name</label><input type="text" placeholder="As per ID proof"></div>
+                <div class="col-md-3"><label>Age</label><input type="number" min="10" max="70" placeholder="e.g. 24"></div>
+                <div class="col-md-3"><label>Gender</label><select><option>Male</option><option>Female</option><option>Other</option></select></div>
+                <div class="col-md-6"><label>Email</label><input type="email" placeholder="email@example.com"></div>
+                <div class="col-md-6"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
+                <div class="col-md-6"><label>Medical Conditions</label><input type="text" placeholder="None / Asthma / etc."></div>
+                <div class="col-md-6"><label>Emergency Contact</label><input type="tel" placeholder="+91 emergency number"></div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-add-participant mt-1" onclick="addParticipant()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Another Participant
+          </button>
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="card-clean">
+          <h2 class="card-title-sm">Payment Method</h2>
+          <div class="payment-method-grid mb-3">
+            <label class="pay-opt selected" onclick="selectPay(this)">
+              <input type="radio" name="paymethod" checked>
+              <div class="pay-icon">
+                <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              </div>
+              <div><div class="pay-opt-label">UPI</div><div class="pay-opt-sub">GPay, PhonePe, Paytm</div></div>
+            </label>
+            <label class="pay-opt" onclick="selectPay(this)">
+              <input type="radio" name="paymethod">
+              <div class="pay-icon">
+                <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><polyline points="1 10 23 10"/></svg>
+              </div>
+              <div><div class="pay-opt-label">Credit / Debit Card</div><div class="pay-opt-sub">Visa, Mastercard, RuPay</div></div>
+            </label>
+            <label class="pay-opt" onclick="selectPay(this)">
+              <input type="radio" name="paymethod">
+              <div class="pay-icon">
+                <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+              <div><div class="pay-opt-label">Net Banking</div><div class="pay-opt-sub">All major banks</div></div>
+            </label>
+            <label class="pay-opt" onclick="selectPay(this)">
+              <input type="radio" name="paymethod">
+              <div class="pay-icon">
+                <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+              </div>
+              <div><div class="pay-opt-label">Cash at Office</div><div class="pay-opt-sub">Pay at our office</div></div>
+            </label>
+          </div>
+          <div id="upiField">
+            <label>UPI ID</label>
+            <input type="text" placeholder="yourname@upi">
+          </div>
+        </div>
+
+        <!-- WHAT'S INCLUDED -->
+        <div class="card-clean">
+          <h2 class="card-title-sm">What's Included</h2>
+          <ul class="checklist">
+            <li><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Certified IMF guide for the entire trek</li>
+            <li><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Return transport from Dehradun</li>
+            <li><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>All camp stays (twin-sharing tents)</li>
+            <li><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>All meals from Day 1 dinner to Day 6 breakfast</li>
+            <li><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>First aid kit and oxygen cylinder</li>
+            <li><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Forest permits and entry fees</li>
+          </ul>
+        </div>
+
+      </div><!-- /form col -->
+
+      <!-- SUMMARY SIDEBAR -->
+      <div class="col-lg-4">
+        <div class="summary-card">
+          <div class="summary-header">
+            <div class="summary-trek-name">Kedarkantha Trek</div>
+            <div class="summary-meta">Jun 14 – Jun 20, 2026 · Moderate</div>
+          </div>
+          <div class="summary-body">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500&q=70" alt="Trek" class="summary-img">
+
+            <div class="fee-row"><span>Base price × <span id="pCount">2</span></span><span id="baseTotal">₹17,000</span></div>
+            <div class="fee-row"><span>Transport</span><span>Included</span></div>
+            <div class="fee-row"><span>Camp stays</span><span>Included</span></div>
+            <div class="fee-row"><span>GST (5%)</span><span id="gstVal">₹850</span></div>
+            <div class="fee-row total"><span>Total Payable</span><span id="grandTotal">₹17,850</span></div>
+
+            <button class="btn-confirm" onclick="showSuccess()">Confirm & Pay</button>
+
+            <div class="guarantee">
+              <svg width="14" height="14" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <p>Free cancellation up to 7 days before departure. Secure payment via 256-bit SSL.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
 
-  <footer class="bg-white py-4 shadow-sm">
-    <div class="container text-center text-muted">&copy; 2026 GreenTrail</div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qXaMeVt1LIZXnG/kZPw4bFn1ox78WolMIpTjN/2rXjzPJGw2EAWac2cPIu2sHfX7" crossorigin="anonymous"></script>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="success-icon">
+      <svg width="28" height="28" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h3>Booking Confirmed!</h3>
+    <p>Your Kedarkantha Trek for Jun 14–20 is booked. A confirmation email has been sent to you. See you on the trail!</p>
+    <a href="my_bookings.html" class="btn-go-bookings">View My Bookings</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const basePerPerson = 8500;
+  let pCount = 2;
+
+  document.getElementById('numParticipants').addEventListener('input', function() {
+    pCount = parseInt(this.value) || 1;
+    updateSummary();
+  });
+
+  function updateSummary() {
+    const base = basePerPerson * pCount;
+    const gst = Math.round(base * 0.05);
+    document.getElementById('pCount').textContent = pCount;
+    document.getElementById('baseTotal').textContent = '₹' + base.toLocaleString('en-IN');
+    document.getElementById('gstVal').textContent = '₹' + gst.toLocaleString('en-IN');
+    document.getElementById('grandTotal').textContent = '₹' + (base + gst).toLocaleString('en-IN');
+  }
+
+  let pBlockCount = 2;
+  function addParticipant() {
+    if (pBlockCount >= 6) return;
+    pBlockCount++;
+    const div = document.createElement('div');
+    div.className = 'participant-block';
+    div.innerHTML = `<div class="block-header"><div class="block-title">Participant ${pBlockCount}</div><button class="btn-remove-p" onclick="removeParticipant(this)">✕ Remove</button></div>
+    <div class="row g-3">
+      <div class="col-md-6"><label>Full Name</label><input type="text" placeholder="As per ID proof"></div>
+      <div class="col-md-3"><label>Age</label><input type="number" min="10" max="70" placeholder="e.g. 24"></div>
+      <div class="col-md-3"><label>Gender</label><select><option>Male</option><option>Female</option><option>Other</option></select></div>
+      <div class="col-md-6"><label>Email</label><input type="email" placeholder="email@example.com"></div>
+      <div class="col-md-6"><label>Phone</label><input type="tel" placeholder="+91 98765 43210"></div>
+      <div class="col-md-6"><label>Medical Conditions</label><input type="text" placeholder="None / other"></div>
+      <div class="col-md-6"><label>Emergency Contact</label><input type="tel" placeholder="+91 emergency number"></div>
+    </div>`;
+    document.getElementById('participantsContainer').appendChild(div);
+    document.getElementById('numParticipants').value = pBlockCount;
+    pCount = pBlockCount;
+    updateSummary();
+  }
+
+  function removeParticipant(btn) {
+    btn.closest('.participant-block').remove();
+    pBlockCount = document.querySelectorAll('.participant-block').length;
+    document.getElementById('numParticipants').value = pBlockCount;
+    pCount = pBlockCount;
+    updateSummary();
+    document.querySelectorAll('.participant-block').forEach((b, i) => {
+      b.querySelector('.block-title').textContent = `Participant ${i + 1}`;
+    });
+  }
+
+  function selectPay(el) {
+    document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    const label = el.querySelector('.pay-opt-label').textContent;
+    document.getElementById('upiField').style.display = label === 'UPI' ? 'block' : 'none';
+  }
+
+  function showSuccess() {
+    document.getElementById('successOverlay').classList.add('show');
+  }
+</script>
 </body>
 </html>

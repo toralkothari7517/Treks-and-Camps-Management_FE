@@ -1,68 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Booking Details</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-C8jQGZ9Rg7uWe6EmxRqnCqSApGxN4P0qPbrIk1H7vHWv+G1AVnWp0B9WFGx0eN9I" crossorigin="anonymous" />
-  <link rel="stylesheet" href="/static/css/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Detail – Trek&Camp</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--brand:#1a6b4a;--brand-light:#e8f5ee;--brand-dark:#0f4a32;--text-main:#1c1c1c;--text-muted:#6b7280;--border:#e5e7eb;--bg:#f9f9f7;--radius:12px;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;color:var(--text-main);background:var(--bg);}
+  .navbar{background:#fff;border-bottom:1px solid var(--border);padding:.85rem 0;}
+  .navbar-brand{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--brand-dark)!important;}
+  .navbar-brand em{color:var(--brand);font-style:normal;}
+  .nav-link{font-size:.875rem;color:var(--text-muted)!important;padding:.4rem .9rem!important;transition:color .15s;}
+  .nav-link:hover{color:var(--brand-dark)!important;}
+  .breadcrumb-bar{background:#fff;border-bottom:1px solid var(--border);padding:.65rem 0;}
+  .breadcrumb{margin:0;font-size:.8rem;}
+  .breadcrumb-item a{color:var(--brand);text-decoration:none;}
+  .breadcrumb-item.active{color:var(--text-muted);}
+  .main{padding:2rem 0 4rem;}
+  .card-clean{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem;}
+  .section-title{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:1.1rem;}
+
+  /* HERO BOOKING CARD */
+  .booking-hero{background:var(--brand-dark);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem;display:flex;min-height:160px;}
+  .booking-hero-img{width:220px;flex-shrink:0;object-fit:cover;}
+  .booking-hero-body{padding:1.5rem;flex:1;display:flex;flex-direction:column;justify-content:center;}
+  .bh-tag{font-size:.68rem;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.5);margin-bottom:.4rem;}
+  .bh-title{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#fff;margin-bottom:.5rem;}
+  .bh-meta{display:flex;gap:1.25rem;flex-wrap:wrap;}
+  .bh-meta span{font-size:.8rem;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:.3rem;}
+  .badge-status{display:inline-block;font-size:.72rem;font-weight:500;padding:.28rem .7rem;border-radius:20px;}
+  .badge-confirmed{background:#dcfce7;color:#166534;}
+  .badge-pending{background:#fef3c7;color:#92400e;}
+  .badge-cancelled{background:#fee2e2;color:#991b1b;}
+  .badge-completed{background:#e0e7ff;color:#3730a3;}
+
+  /* INFO GRID */
+  .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:0;}
+  .info-item .lbl{font-size:.72rem;color:var(--text-muted);margin-bottom:.2rem;}
+  .info-item .val{font-size:.9rem;font-weight:500;}
+
+  /* PARTICIPANT TABLE */
+  .p-table{width:100%;border-collapse:collapse;}
+  .p-table thead th{font-size:.75rem;color:var(--text-muted);font-weight:500;padding:.5rem .75rem;border-bottom:1px solid var(--border);text-align:left;}
+  .p-table tbody td{font-size:.83rem;padding:.7rem .75rem;border-bottom:1px solid #f3f4f2;vertical-align:middle;}
+  .p-table tbody tr:last-child td{border-bottom:none;}
+  .avatar-sm{width:28px;height:28px;border-radius:50%;background:var(--brand-light);color:var(--brand-dark);font-size:.7rem;font-weight:500;display:inline-flex;align-items:center;justify-content:center;margin-right:.5rem;flex-shrink:0;}
+
+  /* PAYMENT CARD */
+  .fee-row{display:flex;justify-content:space-between;font-size:.85rem;padding:.45rem 0;border-bottom:1px solid #f3f4f2;}
+  .fee-row:last-child{border-bottom:none;}
+  .fee-row span:first-child{color:var(--text-muted);}
+  .fee-row.total-row{font-weight:500;font-size:.92rem;border-top:1px solid var(--border);padding-top:.7rem;margin-top:.2rem;}
+
+  /* TIMELINE */
+  .timeline{position:relative;padding-left:1.5rem;}
+  .timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:0;width:1px;background:var(--border);}
+  .tl-item{position:relative;margin-bottom:1.1rem;}
+  .tl-dot{position:absolute;left:-1.5rem;top:4px;width:13px;height:13px;border-radius:50%;border:2px solid var(--brand);background:#fff;z-index:1;}
+  .tl-dot.filled{background:var(--brand);}
+  .tl-title{font-size:.85rem;font-weight:500;margin-bottom:.15rem;}
+  .tl-sub{font-size:.77rem;color:var(--text-muted);}
+
+  /* ACTION BTNS */
+  .btn-primary-sm{background:var(--brand);color:#fff;border:none;border-radius:8px;padding:.5rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:.83rem;font-weight:500;cursor:pointer;text-decoration:none;display:inline-block;transition:background .15s;}
+  .btn-primary-sm:hover{background:var(--brand-dark);color:#fff;}
+  .btn-outline-sm{background:#fff;color:var(--text-main);border:1px solid var(--border);border-radius:8px;padding:.5rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:.83rem;cursor:pointer;text-decoration:none;display:inline-block;transition:background .15s;}
+  .btn-outline-sm:hover{background:var(--bg);}
+  .btn-danger-sm{background:#fff;color:#dc2626;border:1px solid #fecaca;border-radius:8px;padding:.5rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:.83rem;cursor:pointer;display:inline-block;transition:background .15s;}
+  .btn-danger-sm:hover{background:#fee2e2;}
+
+  /* FEEDBACK FORM */
+  .star-rating{display:flex;gap:.35rem;margin-bottom:.85rem;}
+  .star-btn{background:none;border:none;cursor:pointer;font-size:1.5rem;color:#d1d5db;transition:color .15s;padding:0;}
+  .star-btn.active,.star-btn:hover{color:#f59e0b;}
+  textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;resize:vertical;min-height:90px;}
+  textarea:focus{border-color:var(--brand);}
+
+  /* CAMP PILLS */
+  .camp-pill{display:inline-flex;align-items:center;gap:.4rem;background:var(--brand-light);border-radius:20px;padding:.3rem .75rem;font-size:.78rem;color:var(--brand-dark);margin:.2rem;}
+
+  @media(max-width:768px){
+    .booking-hero{flex-direction:column;}
+    .booking-hero-img{width:100%;height:160px;}
+    .info-grid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold text-success" href="/">GreenTrail</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-center gap-2">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/treks">Available Treks</a></li>
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="/my-bookings">My Bookings</a></li>
-        </ul>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Trek<em>&</em>Camp</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="treks.html">Treks</a></li>
+        <li class="nav-item"><a class="nav-link" href="my_bookings.html">My Bookings</a></li>
+        <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="my_bookings.html">My Bookings</a></li>
+      <li class="breadcrumb-item active">BKG001</li>
+    </ol>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="container">
+
+    <!-- BOOKING HERO -->
+    <div class="booking-hero">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=75" alt="Trek" class="booking-hero-img">
+      <div class="booking-hero-body">
+        <div class="bh-tag">Booking ID: BKG001</div>
+        <div class="bh-title">Kedarkantha Trek</div>
+        <div class="bh-meta">
+          <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jun 14 – Jun 20, 2026</span>
+          <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Uttarakhand</span>
+          <span><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>2 Participants</span>
+          <span class="ms-1"><span class="badge-confirmed">Confirmed</span></span>
+        </div>
       </div>
     </div>
-  </nav>
 
-  <main class="container py-5">
-    {% if booking %}
-      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-        <div class="d-flex justify-content-between align-items-start mb-4">
-          <div>
-            <h1 class="fw-bold">Booking {{ booking.BookingID }}</h1>
-            <p class="text-muted mb-0">Status: <span class="text-success">{{ booking.Status }}</span></p>
+    <div class="row g-4">
+      <div class="col-lg-8">
+
+        <!-- BOOKING INFO -->
+        <div class="card-clean">
+          <h2 class="section-title">Booking Overview</h2>
+          <div class="info-grid">
+            <div class="info-item"><div class="lbl">Booked On</div><div class="val">April 10, 2026</div></div>
+            <div class="info-item"><div class="lbl">Instance ID</div><div class="val">INS001</div></div>
+            <div class="info-item"><div class="lbl">Difficulty</div><div class="val">Moderate</div></div>
+            <div class="info-item"><div class="lbl">Duration</div><div class="val">6 Days</div></div>
+            <div class="info-item"><div class="lbl">Max Altitude</div><div class="val">3,810 m</div></div>
+            <div class="info-item"><div class="lbl">Pickup</div><div class="val">Dehradun Railway Station</div></div>
+            <div class="info-item"><div class="lbl">Departure Time</div><div class="val">5:00 AM, Jun 14</div></div>
+            <div class="info-item"><div class="lbl">Guide</div><div class="val">Rajesh Kumar</div></div>
+            <div class="info-item"><div class="lbl">Special Requests</div><div class="val">Vegetarian meals</div></div>
           </div>
-          <a href="/treks" class="btn btn-outline-success">Browse More</a>
-        </div>
-        <div class="row g-4">
-          <div class="col-md-6">
-            <h5 class="fw-semibold">Booking Information</h5>
-            <p class="mb-2"><strong>Instance:</strong> {{ booking.InstanceID }}</p>
-            <p class="mb-2"><strong>Participants:</strong> {{ booking.Number_of_Participants }}</p>
-            <p class="mb-2"><strong>Total Amount:</strong> ₹{{ booking.Total_Amount }}</p>
-            <p class="mb-2"><strong>Requirements:</strong> {{ booking.Special_Requirements or 'None' }}</p>
-          </div>
-          <div class="col-md-6">
-            <h5 class="fw-semibold">Payment</h5>
-            {% if payment %}
-              <p class="mb-2"><strong>Amount:</strong> ₹{{ payment.Amount }}</p>
-              <p class="mb-2"><strong>Method:</strong> {{ payment.Payment_Method }}</p>
-              <p class="mb-2"><strong>Status:</strong> {{ payment.Payment_Status }}</p>
-              <p class="mb-2"><strong>Transaction:</strong> {{ payment.Transaction_ID }}</p>
-            {% else %}
-              <p class="text-muted">No payment recorded yet.</p>
-            {% endif %}
+          <div class="mt-3">
+            <div class="lbl mb-1" style="font-size:.72rem;color:var(--text-muted);">Camps</div>
+            <span class="camp-pill">Juda Ka Talab Camp</span>
+            <span class="camp-pill">Kedarkantha Base Camp</span>
+            <span class="camp-pill">Hergaon Campsite</span>
           </div>
         </div>
+
+        <!-- PARTICIPANTS -->
+        <div class="card-clean">
+          <h2 class="section-title">Participants</h2>
+          <div style="overflow-x:auto;">
+            <table class="p-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Age / Gender</th>
+                  <th>Contact</th>
+                  <th>Medical</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="avatar-sm">AN</span>Ananya Sharma</td>
+                  <td>26 / Female</td>
+                  <td>+91 98765 43210</td>
+                  <td>None</td>
+                  <td><span class="badge-confirmed" style="font-size:.68rem;">Leader</span></td>
+                </tr>
+                <tr>
+                  <td><span class="avatar-sm">RK</span>Rahul Kumar</td>
+                  <td>28 / Male</td>
+                  <td>+91 87654 32109</td>
+                  <td>Mild asthma</td>
+                  <td><span style="background:#f3f4f6;color:#374151;font-size:.68rem;padding:.25rem .6rem;border-radius:20px;font-weight:500;">Member</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TREK TIMELINE -->
+        <div class="card-clean">
+          <h2 class="section-title">Trek Status</h2>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot filled"></div>
+              <div class="tl-title">Booking Confirmed</div>
+              <div class="tl-sub">April 10, 2026 · Payment received</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot filled"></div>
+              <div class="tl-title">Preparation Pack Sent</div>
+              <div class="tl-sub">April 12, 2026 · Packing list & itinerary emailed</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot filled"></div>
+              <div class="tl-title">Guide Assigned</div>
+              <div class="tl-sub">April 14, 2026 · Rajesh Kumar · +91 94530 12345</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-title" style="color:var(--text-muted)">Departure Day</div>
+              <div class="tl-sub">Jun 14, 2026 · Meet at Dehradun Railway Station, 5:00 AM</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-title" style="color:var(--text-muted)">Trek Completion</div>
+              <div class="tl-sub">Jun 20, 2026 · Drop-off at Dehradun</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEEDBACK FORM -->
+        <div class="card-clean" id="feedbackSection">
+          <h2 class="section-title">Leave Feedback</h2>
+          <p style="font-size:.84rem;color:var(--text-muted);margin-bottom:1rem;">Your feedback helps other trekkers and motivates our guides.</p>
+          <div class="mb-3">
+            <label style="font-size:.78rem;color:var(--text-muted);font-weight:500;display:block;margin-bottom:.5rem;">Overall Rating</label>
+            <div class="star-rating" id="starRating">
+              <button class="star-btn" data-v="1" onclick="setRating(1)">★</button>
+              <button class="star-btn" data-v="2" onclick="setRating(2)">★</button>
+              <button class="star-btn" data-v="3" onclick="setRating(3)">★</button>
+              <button class="star-btn" data-v="4" onclick="setRating(4)">★</button>
+              <button class="star-btn" data-v="5" onclick="setRating(5)">★</button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label style="font-size:.78rem;color:var(--text-muted);font-weight:500;display:block;margin-bottom:.35rem;">Your Comments</label>
+            <textarea placeholder="Share your experience — what you loved, what could be improved…"></textarea>
+          </div>
+          <button class="btn-primary-sm">Submit Feedback</button>
+        </div>
+
+      </div><!-- /col -->
+
+      <!-- SIDEBAR -->
+      <div class="col-lg-4">
+
+        <!-- PAYMENT SUMMARY -->
+        <div class="card-clean">
+          <h2 class="section-title">Payment Summary</h2>
+          <div class="fee-row"><span>Base price × 2</span><span>₹17,000</span></div>
+          <div class="fee-row"><span>Transport</span><span>Included</span></div>
+          <div class="fee-row"><span>Camp stays</span><span>Included</span></div>
+          <div class="fee-row"><span>GST (5%)</span><span>₹850</span></div>
+          <div class="fee-row total-row"><span>Total Paid</span><span style="color:var(--brand-dark);">₹17,850</span></div>
+          <div style="margin-top:.85rem;padding:.7rem .9rem;background:var(--brand-light);border-radius:8px;">
+            <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.15rem;">Payment Method</div>
+            <div style="font-size:.88rem;font-weight:500;">UPI · TXN20260410001</div>
+          </div>
+          <div style="margin-top:.65rem;padding:.7rem .9rem;background:#f0fdf4;border-radius:8px;">
+            <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.15rem;">Payment Status</div>
+            <div style="font-size:.88rem;font-weight:500;color:#166534;">✓ Paid in Full</div>
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="card-clean">
+          <h2 class="section-title">Quick Actions</h2>
+          <div class="d-flex flex-column gap-2">
+            <a href="#" class="btn-outline-sm text-center">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:.4rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download E-Ticket
+            </a>
+            <a href="trek_detail.html" class="btn-outline-sm text-center">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:.4rem;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              View Trek Details
+            </a>
+            <button class="btn-danger-sm">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:.4rem;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Cancel Booking
+            </button>
+          </div>
+          <p style="font-size:.72rem;color:var(--text-muted);margin-top:.75rem;line-height:1.5;">Free cancellation available until Jun 7, 2026. After that, a 50% cancellation fee applies.</p>
+        </div>
+
+        <!-- GUIDE CONTACT -->
+        <div class="card-clean">
+          <h2 class="section-title">Your Guide</h2>
+          <div style="display:flex;align-items:center;gap:.85rem;margin-bottom:.85rem;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--brand-light);color:var(--brand-dark);font-family:'DM Serif Display',serif;font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">RK</div>
+            <div>
+              <div style="font-weight:500;font-size:.92rem;">Rajesh Kumar</div>
+              <div style="font-size:.78rem;color:var(--text-muted);">8 yrs exp · IMF Certified</div>
+            </div>
+          </div>
+          <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:.3rem;">Guide Contact</div>
+          <div style="font-size:.9rem;font-weight:500;">+91 94530 12345</div>
+        </div>
+
       </div>
-    {% else %}
-      <div class="alert alert-warning" role="alert">Booking not found.</div>
-    {% endif %}
-  </main>
+    </div>
+  </div>
+</div>
 
-  <footer class="bg-white py-4 shadow-sm">
-    <div class="container text-center text-muted">&copy; 2026 GreenTrail</div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qXaMeVt1LIZXnG/kZPw4bFn1ox78WolMIpTjN/2rXjzPJGw2EAWac2cPIu2sHfX7" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let currentRating = 0;
+  function setRating(n) {
+    currentRating = n;
+    document.querySelectorAll('.star-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i < n);
+    });
+  }
+</script>
 </body>
 </html>
