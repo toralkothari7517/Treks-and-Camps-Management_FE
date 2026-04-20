@@ -1,264 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login – Trek&Camp</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login – Trek&Camp Maharashtra</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-  :root{--brand:#1a6b4a;--brand-light:#e8f5ee;--brand-dark:#0f4a32;--text-main:#1c1c1c;--text-muted:#6b7280;--border:#e5e7eb;--bg:#f9f9f7;--radius:12px;}
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'DM Sans',sans-serif;color:var(--text-main);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
-  a{text-decoration:none;}
-
-  /* SPLIT LAYOUT */
-  .auth-wrapper{flex:1;display:flex;min-height:100vh;}
-  .auth-left{flex:1;background:var(--brand-dark);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:3rem;}
-  .auth-left img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45;}
-  .auth-left-content{position:relative;z-index:2;}
-  .al-brand{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#fff;margin-bottom:2rem;}
-  .al-brand em{color:#6ee9a8;font-style:normal;}
-  .al-title{font-family:'DM Serif Display',serif;font-size:2.2rem;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:.75rem;}
-  .al-title em{font-style:italic;color:#a7f3d0;}
-  .al-sub{font-size:.9rem;color:rgba(255,255,255,.7);line-height:1.7;max-width:340px;margin-bottom:2rem;}
-  .al-stats{display:flex;gap:2rem;}
-  .al-stat .val{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#fff;}
-  .al-stat .lbl{font-size:.75rem;color:rgba(255,255,255,.5);}
-  .al-testimonial{margin-top:2rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:1.1rem 1.25rem;backdrop-filter:blur(6px);}
-  .al-testimonial p{font-size:.85rem;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:.6rem;}
-  .al-testimonial .t-author{font-size:.75rem;color:rgba(255,255,255,.5);}
-
-  /* AUTH FORM SIDE */
-  .auth-right{width:460px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem;}
-  .auth-tab-header{display:flex;gap:0;margin-bottom:2rem;background:var(--bg);border-radius:10px;padding:4px;}
-  .auth-tab{flex:1;padding:.55rem;text-align:center;border-radius:8px;font-size:.875rem;cursor:pointer;color:var(--text-muted);transition:all .15s;border:none;background:transparent;font-family:'DM Sans',sans-serif;}
-  .auth-tab.active{background:#fff;color:var(--text-main);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.08);}
-  .auth-form-title{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:.35rem;letter-spacing:-.3px;}
-  .auth-form-sub{font-size:.85rem;color:var(--text-muted);margin-bottom:1.75rem;}
-  .field-group{margin-bottom:1rem;}
-  .field-group label{font-size:.75rem;color:var(--text-muted);font-weight:500;display:block;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.3px;}
-  .field-group input{width:100%;border:1px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .15s;background:#fff;color:var(--text-main);}
-  .field-group input:focus{border-color:var(--brand);}
-  .field-group.password-wrap{position:relative;}
-  .field-group.password-wrap input{padding-right:2.5rem;}
-  .show-pass{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);padding:0;display:flex;align-items:center;}
-  .forgot-link{font-size:.78rem;color:var(--brand);float:right;margin-top:-.6rem;margin-bottom:.85rem;}
-  .btn-auth{width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:.75rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;transition:background .15s;margin-top:.5rem;}
-  .btn-auth:hover{background:var(--brand-dark);}
-  .divider{display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;}
-  .divider span{font-size:.78rem;color:var(--text-muted);white-space:nowrap;}
-  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
-  .btn-social{width:100%;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.65rem;font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:background .15s;margin-bottom:.6rem;color:var(--text-main);}
-  .btn-social:hover{background:var(--bg);}
-  .auth-footer-text{font-size:.8rem;color:var(--text-muted);text-align:center;margin-top:1.25rem;}
-  .auth-footer-text a{color:var(--brand);font-weight:500;}
-
-  /* Password strength */
-  .strength-bar{height:4px;border-radius:20px;background:var(--border);margin-top:.5rem;overflow:hidden;}
-  .strength-fill{height:100%;border-radius:20px;transition:width .3s,background .3s;}
-
-  /* Field error */
-  .field-error{font-size:.75rem;color:#dc2626;margin-top:.3rem;display:none;}
-  .field-group.has-error input{border-color:#dc2626;}
-  .field-group.has-error .field-error{display:block;}
-  .field-group.has-success input{border-color:#16a34a;}
-
-  /* Tabs panels */
-  .tab-panel{display:none;}
-  .tab-panel.active{display:block;}
-
-  @media(max-width:900px){
-    .auth-left{display:none;}
-    .auth-right{width:100%;padding:2.5rem 2rem;justify-content:flex-start;padding-top:3rem;}
-    .auth-wrapper{min-height:auto;}
-  }
+body{background:var(--brand-dark);min-height:100vh;}
+.auth-wrap{min-height:100vh;display:flex;}
+.auth-left{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:3rem;}
+.auth-left img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42;}
+.al-c{position:relative;z-index:2;}
+.al-brand{font-family:'DM Serif Display',serif;font-size:1.35rem;color:#fff;margin-bottom:1.75rem;}
+.al-brand em{color:#f4a070;font-style:normal;}
+.al-title{font-family:'DM Serif Display',serif;font-size:2.2rem;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:.65rem;}
+.al-title em{font-style:italic;color:#f4a070;}
+.al-sub{font-size:.88rem;color:rgba(255,255,255,.7);max-width:340px;line-height:1.7;margin-bottom:1.75rem;}
+.al-stats{display:flex;gap:2rem;margin-bottom:1.75rem;}
+.al-stat .sv{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#fff;}
+.al-stat .sl{font-size:.73rem;color:rgba(255,255,255,.45);}
+.al-quote{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:1rem 1.15rem;backdrop-filter:blur(5px);}
+.al-quote p{font-size:.84rem;color:rgba(255,255,255,.8);line-height:1.65;margin-bottom:.5rem;}
+.al-quote .qa{font-size:.73rem;color:rgba(255,255,255,.45);}
+.auth-right{width:440px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem;}
+.tab-hdr{display:flex;gap:0;margin-bottom:1.85rem;background:var(--bg);border-radius:10px;padding:4px;}
+.tab-btn{flex:1;padding:.52rem;text-align:center;border-radius:8px;font-size:.875rem;cursor:pointer;color:var(--text-muted);transition:all .15s;border:none;background:transparent;font-family:'DM Sans',sans-serif;}
+.tab-btn.active{background:#fff;color:var(--text-main);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+.form-title{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:.3rem;letter-spacing:-.3px;}
+.form-sub{font-size:.84rem;color:var(--text-muted);margin-bottom:1.6rem;}
+.fg{margin-bottom:.9rem;}
+.fg label{font-size:.73rem;color:var(--text-muted);font-weight:500;display:block;margin-bottom:.32rem;text-transform:uppercase;letter-spacing:.3px;}
+.fg input{width:100%;border:1px solid var(--border);border-radius:9px;padding:.62rem .88rem;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .15s;background:#fff;}
+.fg input:focus{border-color:var(--brand);}
+.fg.has-error input{border-color:#dc2626;}
+.ferr{font-size:.73rem;color:#dc2626;margin-top:.28rem;display:none;}
+.fg.has-error .ferr{display:block;}
+.pw-wrap{position:relative;}
+.pw-wrap input{padding-right:2.5rem;}
+.pw-toggle{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);padding:0;display:flex;align-items:center;}
+.strength-bar{height:4px;border-radius:20px;background:var(--border);margin-top:.45rem;overflow:hidden;}
+.strength-fill{height:100%;border-radius:20px;transition:width .3s,background .3s;}
+.btn-auth{width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:.73rem;font-family:'DM Sans',sans-serif;font-size:.93rem;font-weight:500;cursor:pointer;transition:background .15s;margin-top:.4rem;}
+.btn-auth:hover{background:var(--brand-dark);}
+.divider{display:flex;align-items:center;gap:.7rem;margin:1.15rem 0;}
+.divider span{font-size:.76rem;color:var(--text-muted);white-space:nowrap;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.btn-social{width:100%;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.62rem;font-family:'DM Sans',sans-serif;font-size:.86rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.55rem;transition:background .15s;color:var(--text-main);margin-bottom:.55rem;}
+.btn-social:hover{background:var(--bg);}
+.auth-foot{font-size:.78rem;color:var(--text-muted);text-align:center;margin-top:1.1rem;}
+.auth-foot a{color:var(--brand);font-weight:500;cursor:pointer;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+@media(max-width:860px){.auth-left{display:none;}.auth-right{width:100%;padding:2.5rem 1.75rem;}.auth-wrap{min-height:auto;background:#fff;}}
 </style>
 </head>
 <body>
-<div class="auth-wrapper">
-
-  <!-- LEFT PANEL -->
+<div class="auth-wrap">
   <div class="auth-left">
-    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80" alt="Mountains">
-    <div class="auth-left-content">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80" alt="Sahyadri">
+    <div class="al-c">
       <div class="al-brand">Trek<em>&</em>Camp</div>
-      <h2 class="al-title">Every Trek Begins<br>With a <em>Single Step</em></h2>
-      <p class="al-sub">Join thousands of trekkers who plan, book, and experience the best Himalayan adventures through our platform.</p>
+      <h2 class="al-title">Where Every Trek<br>Begins With <em>One Step</em></h2>
+      <p class="al-sub">Book Harishchandragad, Rajgad, Kalsubai and 7 more Maharashtra treks with expert guides and full logistics support.</p>
       <div class="al-stats">
-        <div class="al-stat"><div class="val">50+</div><div class="lbl">Trek Routes</div></div>
-        <div class="al-stat"><div class="val">2,400+</div><div class="lbl">Trekkers</div></div>
-        <div class="al-stat"><div class="val">4.8★</div><div class="lbl">Avg. Rating</div></div>
+        <div class="al-stat"><div class="sv">10</div><div class="sl">Trek Routes</div></div>
+        <div class="al-stat"><div class="sv">1,800+</div><div class="sl">Trekkers</div></div>
+        <div class="al-stat"><div class="sv">4.8★</div><div class="sl">Avg. Rating</div></div>
       </div>
-      <div class="al-testimonial">
-        <p>The booking experience was seamless — I had my Kedarkantha trek sorted in under 5 minutes. Best trek of my life.</p>
-        <div class="t-author">— Ananya Sharma · Kedarkantha, 2026</div>
+      <div class="al-quote">
+        <p>Harishchandragad at sunrise — no words. Trek&Camp handled every single detail.</p>
+        <div class="qa">— Priya Deshmukh · Harishchandragad, Feb 2026</div>
       </div>
     </div>
   </div>
-
-  <!-- RIGHT PANEL (FORM) -->
   <div class="auth-right">
-
-    <!-- TAB TOGGLE -->
-    <div class="auth-tab-header" role="tablist">
-      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
-      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+    <div class="tab-hdr">
+      <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+      <button class="tab-btn" onclick="switchTab('signup')">Create Account</button>
     </div>
-
-    <!-- LOGIN FORM -->
+    <!-- LOGIN -->
     <div class="tab-panel active" id="panel-login">
-      <h2 class="auth-form-title">Welcome back</h2>
-      <p class="auth-form-sub">Sign in to view your bookings and explore treks.</p>
-
-      <div class="field-group" id="emailGroup">
+      <h2 class="form-title">Welcome back</h2>
+      <p class="form-sub">Sign in to access your bookings and explore treks.</p>
+      <div class="fg" id="emailGrp">
         <label>Email Address</label>
-        <input type="email" id="loginEmail" placeholder="you@example.com" oninput="clearError('emailGroup')">
-        <div class="field-error">Please enter a valid email address.</div>
+        <input type="email" id="loginEmail" placeholder="you@example.com">
+        <div class="ferr">Enter a valid email address.</div>
       </div>
-
-      <div class="field-group password-wrap" id="passGroup">
+      <div class="fg pw-wrap" id="passGrp">
         <label>Password</label>
-        <input type="password" id="loginPass" placeholder="Your password" oninput="clearError('passGroup')">
-        <button class="show-pass" onclick="togglePass('loginPass', this)">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-        <div class="field-error">Password must be at least 6 characters.</div>
+        <input type="password" id="loginPass" placeholder="Your password">
+        <button type="button" class="pw-toggle" onclick="togglePw('loginPass',this)"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <div class="ferr">Password must be at least 6 characters.</div>
       </div>
-
-      <a href="#" class="forgot-link">Forgot password?</a>
-
+      <a href="#" style="font-size:.76rem;color:var(--brand);float:right;margin-top:-.55rem;margin-bottom:.8rem;display:block;">Forgot password?</a>
       <button class="btn-auth" onclick="handleLogin()">Sign In</button>
-
-      <div class="divider"><span>or continue with</span></div>
-
-      <button class="btn-social">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>
-        Continue with Google
-      </button>
-
-      <div class="auth-footer-text">Don't have an account? <a href="#" onclick="switchTab('signup')">Sign up free</a></div>
+      <div class="divider"><span>or</span></div>
+      <button class="btn-social"><svg width="17" height="17" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>Continue with Google</button>
+      <div class="auth-foot">No account? <a onclick="switchTab('signup')">Sign up free</a></div>
     </div>
-
-    <!-- SIGNUP FORM -->
+    <!-- SIGNUP -->
     <div class="tab-panel" id="panel-signup">
-      <h2 class="auth-form-title">Create account</h2>
-      <p class="auth-form-sub">Start booking your Himalayan adventures today.</p>
-
+      <h2 class="form-title">Create account</h2>
+      <p class="form-sub">Start booking your Sahyadri adventures today.</p>
       <div class="row g-2 mb-0">
-        <div class="col-6">
-          <div class="field-group">
-            <label>First Name</label>
-            <input type="text" placeholder="Ananya">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="field-group">
-            <label>Last Name</label>
-            <input type="text" placeholder="Sharma">
-          </div>
-        </div>
+        <div class="col-6"><div class="fg"><label>First Name</label><input type="text" placeholder="Priya"></div></div>
+        <div class="col-6"><div class="fg"><label>Last Name</label><input type="text" placeholder="Deshmukh"></div></div>
       </div>
-
-      <div class="field-group" id="suEmailGroup">
-        <label>Email Address</label>
-        <input type="email" id="signupEmail" placeholder="you@example.com">
-        <div class="field-error">Please enter a valid email address.</div>
-      </div>
-
-      <div class="field-group">
-        <label>Phone Number</label>
-        <input type="tel" placeholder="+91 98765 43210">
-      </div>
-
-      <div class="field-group password-wrap" id="suPassGroup">
+      <div class="fg"><label>Email Address</label><input type="email" id="suEmail" placeholder="you@example.com"></div>
+      <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+91 9XXXXXXXXX"></div>
+      <div class="fg pw-wrap">
         <label>Password</label>
-        <input type="password" id="signupPass" placeholder="Create a strong password" oninput="checkStrength(this.value)">
-        <button class="show-pass" onclick="togglePass('signupPass', this)">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-        <div class="strength-bar"><div class="strength-fill" id="strengthFill" style="width:0%;background:#e5e7eb;"></div></div>
-        <div class="field-error">Password must be at least 6 characters.</div>
+        <input type="password" id="suPass" placeholder="Create a strong password" oninput="chkStrength(this.value)">
+        <button type="button" class="pw-toggle" onclick="togglePw('suPass',this)"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <div class="strength-bar"><div class="strength-fill" id="sbar" style="width:0%;background:var(--border);"></div></div>
       </div>
-
       <button class="btn-auth" onclick="handleSignup()">Create My Account</button>
-
-      <div class="divider"><span>or sign up with</span></div>
-
-      <button class="btn-social">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>
-        Continue with Google
-      </button>
-
-      <div class="auth-footer-text">Already have an account? <a href="#" onclick="switchTab('login')">Sign in</a></div>
+      <div class="divider"><span>or</span></div>
+      <button class="btn-social"><svg width="17" height="17" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>Continue with Google</button>
+      <div class="auth-foot">Have an account? <a onclick="switchTab('login')">Sign in</a></div>
     </div>
-
   </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="shared.js"></script>
 <script>
-  function switchTab(tab) {
-    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-    document.getElementById('panel-' + tab).classList.add('active');
+function switchTab(t){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(t==='login'&&i===0)||(t==='signup'&&i===1)));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+t).classList.add('active');
+}
+function togglePw(id,btn){const i=document.getElementById(id);i.type=i.type==='text'?'password':'text';btn.style.opacity=i.type==='text'?'1':'0.5';}
+function chkStrength(v){
+  const f=document.getElementById('sbar');let s=0;
+  if(v.length>=6)s++;if(v.length>=10)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^a-zA-Z0-9]/.test(v))s++;
+  const w=['0%','20%','45%','65%','85%','100%'],c=['#e5e7eb','#ef4444','#f59e0b','#eab308','#22c55e','#16a34a'];
+  f.style.width=w[s];f.style.background=c[s];
+}
+function handleLogin(){
+  const e=document.getElementById('loginEmail'),p=document.getElementById('loginPass');
+  let ok=true;
+  document.getElementById('emailGrp').classList.remove('has-error');
+  document.getElementById('passGrp').classList.remove('has-error');
+  if(!e.value||!e.value.includes('@')){document.getElementById('emailGrp').classList.add('has-error');ok=false;}
+  if(!p.value||p.value.length<6){document.getElementById('passGrp').classList.add('has-error');ok=false;}
+  if(ok){
+    const next = new URLSearchParams(location.search).get('next');
+    location.href = next || 'my_bookings.html';
   }
-
-  function togglePass(id, btn) {
-    const inp = document.getElementById(id);
-    const isText = inp.type === 'text';
-    inp.type = isText ? 'password' : 'text';
-    btn.style.opacity = isText ? '0.5' : '1';
-  }
-
-  function clearError(groupId) {
-    document.getElementById(groupId).classList.remove('has-error');
-  }
-
-  function checkStrength(val) {
-    const fill = document.getElementById('strengthFill');
-    let score = 0;
-    if (val.length >= 6) score++;
-    if (val.length >= 10) score++;
-    if (/[A-Z]/.test(val)) score++;
-    if (/[0-9]/.test(val)) score++;
-    if (/[^a-zA-Z0-9]/.test(val)) score++;
-    const widths = ['0%', '20%', '45%', '65%', '85%', '100%'];
-    const colors = ['#e5e7eb', '#ef4444', '#f59e0b', '#eab308', '#22c55e', '#16a34a'];
-    fill.style.width = widths[score];
-    fill.style.background = colors[score];
-  }
-
-  function handleLogin() {
-    const email = document.getElementById('loginEmail').value;
-    const pass = document.getElementById('loginPass').value;
-    let valid = true;
-    if (!email || !email.includes('@')) {
-      document.getElementById('emailGroup').classList.add('has-error');
-      valid = false;
-    }
-    if (!pass || pass.length < 6) {
-      document.getElementById('passGroup').classList.add('has-error');
-      valid = false;
-    }
-    if (valid) window.location.href = 'my_bookings.html';
-  }
-
-  function handleSignup() {
-    const email = document.getElementById('signupEmail').value;
-    const pass = document.getElementById('signupPass').value;
-    let valid = true;
-    if (!email || !email.includes('@')) {
-      document.getElementById('suEmailGroup').classList.add('has-error');
-      valid = false;
-    }
-    if (!pass || pass.length < 6) {
-      document.getElementById('suPassGroup').classList.add('has-error');
-      valid = false;
-    }
-    if (valid) window.location.href = 'my_bookings.html';
-  }
+}
+function handleSignup(){
+  const e=document.getElementById('suEmail'),p=document.getElementById('suPass');
+  if(!e.value.includes('@')||p.value.length<6){alert('Please fill in all fields correctly.');return;}
+  location.href='my_bookings.html';
+}
 </script>
 </body>
 </html>

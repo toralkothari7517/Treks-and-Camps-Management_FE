@@ -1,222 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trek&Camp – Explore the Himalayas</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Trek&Camp Maharashtra – Explore the Sahyadris</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-  :root {
-    --brand: #1a6b4a; --brand-light: #e8f5ee; --brand-dark: #0f4a32;
-    --text-main: #1c1c1c; --text-muted: #6b7280;
-    --border: #e5e7eb; --bg: #f9f9f7; --radius: 14px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; color: var(--text-main); background: var(--bg); }
-
-  /* NAV */
-  .navbar { background: transparent; padding: 1.1rem 0; position: absolute; top: 0; left: 0; right: 0; z-index: 100; }
-  .navbar.scrolled { background: #fff; position: fixed; box-shadow: 0 1px 0 var(--border); padding: 0.75rem 0; }
-  .navbar-brand { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: #fff !important; letter-spacing: -0.3px; }
-  .navbar.scrolled .navbar-brand { color: var(--brand-dark) !important; }
-  .navbar-brand em { color: #6ee9a8; font-style: normal; }
-  .navbar.scrolled .navbar-brand em { color: var(--brand); }
-  .nav-link { font-size: 0.875rem; color: rgba(255,255,255,0.85) !important; padding: 0.4rem 0.9rem !important; transition: color 0.15s; }
-  .navbar.scrolled .nav-link { color: var(--text-muted) !important; }
-  .nav-link:hover { color: #fff !important; }
-  .navbar.scrolled .nav-link:hover { color: var(--brand-dark) !important; }
-  .btn-nav { background: rgba(255,255,255,0.15); color: #fff !important; border: 1px solid rgba(255,255,255,0.35); border-radius: 8px; font-size: 0.875rem; padding: 0.4rem 1.1rem !important; font-weight: 500; backdrop-filter: blur(4px); transition: background 0.15s; }
-  .btn-nav:hover { background: rgba(255,255,255,0.25); }
-  .navbar.scrolled .btn-nav { background: var(--brand); border-color: var(--brand); }
-  .navbar.scrolled .btn-nav:hover { background: var(--brand-dark); }
-  .navbar-toggler { border: 1px solid rgba(255,255,255,0.3); }
-  .navbar.scrolled .navbar-toggler { border-color: var(--border); }
-
-  /* HERO */
-  .hero { height: 100vh; min-height: 620px; position: relative; overflow: hidden; }
-  .hero-bg { position: absolute; inset: 0; }
-  .hero-bg img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); animation: slowZoom 10s ease forwards; }
-  @keyframes slowZoom { from { transform: scale(1.06); } to { transform: scale(1.0); } }
-  .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(5,25,15,0.45) 0%, rgba(5,25,15,0.25) 40%, rgba(5,25,15,0.65) 100%); }
-  .hero-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; padding-top: 80px; }
-  .hero-eyebrow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #6ee9a8; font-weight: 500; margin-bottom: 1rem; animation: fadeUp 0.7s 0.2s both; }
-  .hero-title { font-family: 'DM Serif Display', serif; font-size: clamp(2.6rem, 6vw, 4.5rem); color: #fff; line-height: 1.08; letter-spacing: -1px; margin-bottom: 1.25rem; animation: fadeUp 0.7s 0.35s both; }
-  .hero-title em { font-style: italic; color: #a7f3d0; }
-  .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.78); max-width: 460px; line-height: 1.7; margin-bottom: 2rem; animation: fadeUp 0.7s 0.5s both; }
-  .hero-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.65s both; }
-  .btn-hero-primary { background: var(--brand); color: #fff; border: none; border-radius: 10px; padding: 0.8rem 1.75rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.15s; }
-  .btn-hero-primary:hover { background: var(--brand-dark); color: #fff; }
-  .btn-hero-secondary { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; padding: 0.8rem 1.75rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 400; cursor: pointer; text-decoration: none; backdrop-filter: blur(6px); display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.15s; }
-  .btn-hero-secondary:hover { background: rgba(255,255,255,0.2); color: #fff; }
-  .hero-stats { display: flex; gap: 2.5rem; margin-top: 3.5rem; animation: fadeUp 0.7s 0.8s both; }
-  .hero-stat .val { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: #fff; line-height: 1; }
-  .hero-stat .lbl { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 0.2rem; }
-  .hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.4rem; z-index: 2; animation: fadeIn 1s 1.2s both; }
-  .hero-scroll span { font-size: 0.68rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1.5px; }
-  .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent); animation: scrollPulse 1.8s infinite; }
-  @keyframes scrollPulse { 0%,100%{ opacity:0.4; transform:scaleY(1); } 50%{ opacity:1; transform:scaleY(0.6); } }
-  @keyframes fadeUp { from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
-  @keyframes fadeIn { from{ opacity:0; } to{ opacity:1; } }
-
-  /* SEARCH BAR */
-  .search-section { background: #fff; border-bottom: 1px solid var(--border); padding: 0; }
-  .search-card { background: #fff; border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.12); padding: 1.25rem 1.5rem; margin-top: -50px; position: relative; z-index: 10; }
-  .search-card .row { align-items: flex-end; }
-  .search-field label { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.4rem; }
-  .search-field input, .search-field select { width: 100%; border: 1px solid var(--border); border-radius: 9px; padding: 0.6rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.15s; background: #fff; color: var(--text-main); }
-  .search-field input:focus, .search-field select:focus { border-color: var(--brand); }
-  .btn-search { width: 100%; background: var(--brand); color: #fff; border: none; border-radius: 9px; padding: 0.65rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background 0.15s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-  .btn-search:hover { background: var(--brand-dark); }
-  .search-divider { width: 1px; background: var(--border); align-self: stretch; margin: 0 0.25rem; }
-
-  /* SECTIONS */
-  .section { padding: 5rem 0; }
-  .section-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--brand); font-weight: 500; margin-bottom: 0.4rem; }
-  .section-title { font-family: 'DM Serif Display', serif; font-size: 2rem; letter-spacing: -0.3px; margin-bottom: 0.75rem; }
-  .section-sub { font-size: 0.93rem; color: var(--text-muted); max-width: 480px; line-height: 1.7; }
-
-  /* CATEGORY CARDS */
-  .cat-card { border-radius: 14px; overflow: hidden; position: relative; height: 220px; cursor: pointer; display: block; text-decoration: none; }
-  .cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-  .cat-card:hover img { transform: scale(1.07); }
-  .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,20,12,0.75) 0%, transparent 55%); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; }
-  .cat-badge { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.8px; background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 0.2rem 0.6rem; width: fit-content; margin-bottom: 0.4rem; }
-  .cat-name { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: #fff; }
-  .cat-count { font-size: 0.75rem; color: rgba(255,255,255,0.65); margin-top: 0.15rem; }
-
-  /* TREK CARDS (mini) */
-  .trek-mini { background: #fff; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; height: 100%; display: flex; flex-direction: column; }
-  .trek-mini:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-  .trek-mini .img-wrap { height: 180px; overflow: hidden; position: relative; }
-  .trek-mini .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-  .trek-mini:hover .img-wrap img { transform: scale(1.05); }
-  .trek-mini .diff-badge { position: absolute; top: 10px; left: 10px; font-size: 0.67rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; padding: 0.25rem 0.6rem; border-radius: 20px; }
-  .diff-easy    { background: rgba(220,252,231,0.92); color: #166534; }
-  .diff-moderate{ background: rgba(254,243,199,0.92); color: #92400e; }
-  .diff-difficult{ background: rgba(254,226,226,0.92); color: #991b1b; }
-  .diff-extreme { background: rgba(30,10,10,0.8); color: #fca5a5; }
-  .trek-mini .body { padding: 1rem 1.1rem; flex: 1; display: flex; flex-direction: column; }
-  .trek-mini .loc { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.25rem; }
-  .trek-mini h4 { font-family: 'DM Serif Display', serif; font-size: 1rem; margin-bottom: 0.5rem; }
-  .trek-mini .meta { display: flex; gap: 0.85rem; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.85rem; }
-  .trek-mini .footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border); }
-  .trek-mini .price { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--brand-dark); }
-  .trek-mini .price span { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--text-muted); font-weight: 400; display: block; }
-  .btn-mini { background: var(--brand); color: #fff; border: none; border-radius: 7px; padding: 0.38rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.15s; }
-  .btn-mini:hover { background: var(--brand-dark); color: #fff; }
-  .rating-chip { position: absolute; bottom: 8px; right: 8px; background: rgba(255,255,255,0.9); border-radius: 20px; font-size: 0.72rem; font-weight: 500; padding: 0.18rem 0.5rem; display: flex; align-items: center; gap: 0.2rem; }
-
-  /* STEPS */
-  .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--brand-light); color: var(--brand-dark); font-family: 'DM Serif Display', serif; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-bottom: 1rem; }
-  .step-title { font-weight: 500; margin-bottom: 0.35rem; font-size: 0.95rem; }
-  .step-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; }
-  .step-connector { position: absolute; top: 22px; left: calc(50% + 22px); right: calc(-50% + 22px); height: 1px; background: var(--border); }
-
-  /* TESTIMONIALS */
-  .testimonial-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; height: 100%; }
-  .t-quote { font-family: 'DM Serif Display', serif; font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.1rem; color: #2a2a2a; }
-  .t-quote::before { content: '"'; color: var(--brand); font-size: 1.5rem; line-height: 0; vertical-align: -0.35em; margin-right: 0.2rem; }
-  .t-footer { display: flex; align-items: center; gap: 0.75rem; }
-  .t-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--brand-light); color: var(--brand-dark); font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .t-name { font-size: 0.85rem; font-weight: 500; }
-  .t-meta { font-size: 0.75rem; color: var(--text-muted); }
-  .stars { color: #f59e0b; font-size: 0.8rem; letter-spacing: 1px; }
-
-  /* CTA BANNER */
-  .cta-banner { background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 100%); border-radius: 20px; padding: 3.5rem; color: #fff; position: relative; overflow: hidden; }
-  .cta-banner::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,0.05); }
-  .cta-banner h2 { font-family: 'DM Serif Display', serif; font-size: 2.2rem; margin-bottom: 0.65rem; letter-spacing: -0.3px; }
-  .cta-banner p { color: rgba(255,255,255,0.75); max-width: 420px; line-height: 1.7; margin-bottom: 1.75rem; font-size: 0.93rem; }
-  .btn-cta-white { background: #fff; color: var(--brand-dark); border: none; border-radius: 10px; padding: 0.75rem 1.75rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; transition: opacity 0.15s; }
-  .btn-cta-white:hover { opacity: 0.9; color: var(--brand-dark); }
-
-  /* FOOTER */
-  footer { background: var(--brand-dark); color: rgba(255,255,255,0.65); padding: 3.5rem 0 1.5rem; }
-  footer .brand { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: #fff; margin-bottom: 0.5rem; }
-  footer .brand em { color: #6ee9a8; font-style: normal; }
-  footer p { font-size: 0.83rem; max-width: 240px; line-height: 1.7; }
-  footer h6 { color: rgba(255,255,255,0.35); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.85rem; }
-  footer a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.85rem; display: block; margin-bottom: 0.4rem; transition: color 0.15s; }
-  footer a:hover { color: #fff; }
-  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 2.5rem; padding-top: 1.25rem; font-size: 0.78rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+.hero{height:100vh;min-height:620px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;}
+.hero-bg img{width:100%;height:100%;object-fit:cover;animation:slowZoom 10s ease forwards;}
+@keyframes slowZoom{from{transform:scale(1.06)}to{transform:scale(1.0)}}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,5,5,.5) 0%,rgba(10,5,5,.2) 40%,rgba(10,5,5,.7) 100%);}
+.hero-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;padding-top:80px;}
+.hero-eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;color:#f4a070;font-weight:500;margin-bottom:1rem;animation:fadeUp .7s .2s both;}
+.hero-title{font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,6vw,4.2rem);color:#fff;line-height:1.08;letter-spacing:-1px;margin-bottom:1.25rem;animation:fadeUp .7s .35s both;}
+.hero-title em{font-style:italic;color:#f4a070;}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.78);max-width:460px;line-height:1.75;margin-bottom:2rem;animation:fadeUp .7s .5s both;}
+.hero-actions{display:flex;gap:.85rem;flex-wrap:wrap;animation:fadeUp .7s .65s both;}
+.btn-hero-p{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:.8rem 1.75rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:background .15s;}
+.btn-hero-p:hover{background:var(--brand-dark);color:#fff;}
+.btn-hero-s{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:10px;padding:.8rem 1.75rem;font-family:'DM Sans',sans-serif;font-size:.95rem;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;backdrop-filter:blur(6px);transition:background .15s;}
+.btn-hero-s:hover{background:rgba(255,255,255,.22);color:#fff;}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3.5rem;animation:fadeUp .7s .8s both;}
+.hero-stat .val{font-family:'DM Serif Display',serif;font-size:1.9rem;color:#fff;line-height:1;}
+.hero-stat .lbl{font-size:.75rem;color:rgba(255,255,255,.5);margin-top:.2rem;}
+.scroll-ind{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;z-index:2;animation:fadeIn 1s 1.2s both;}
+.scroll-ind span{font-size:.65rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,.5),transparent);animation:scrollPulse 1.8s infinite;}
+@keyframes scrollPulse{0%,100%{opacity:.4}50%{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.search-card{background:#fff;border-radius:16px;box-shadow:var(--shadow-md);padding:1.25rem 1.5rem;margin-top:-50px;position:relative;z-index:10;}
+.btn-search{width:100%;background:var(--brand);color:#fff;border:none;border-radius:9px;padding:.65rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.btn-search:hover{background:var(--brand-dark);}
+.region-strip{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.25rem;scrollbar-width:none;}
+.region-strip::-webkit-scrollbar{display:none;}
+.region-chip{white-space:nowrap;border:1px solid var(--border);border-radius:20px;padding:.36rem .88rem;font-size:.82rem;color:var(--text-muted);background:#fff;cursor:pointer;transition:all .15s;text-decoration:none;}
+.region-chip:hover,.region-chip.active{background:var(--brand-light);border-color:var(--brand);color:var(--brand-dark);}
+.section{padding:4.5rem 0;}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--brand);font-weight:500;margin-bottom:.35rem;}
+.sec-title{font-family:'DM Serif Display',serif;font-size:1.9rem;letter-spacing:-.3px;margin-bottom:.65rem;}
+.sec-sub{font-size:.93rem;color:var(--text-muted);line-height:1.7;}
+.trek-card{background:#fff;border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;transition:transform .2s,box-shadow .2s;height:100%;display:flex;flex-direction:column;cursor:pointer;}
+.trek-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+.tc-img{position:relative;height:200px;overflow:hidden;}
+.tc-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.trek-card:hover .tc-img img{transform:scale(1.05);}
+.tc-rating{position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,.92);border-radius:20px;font-size:.72rem;font-weight:500;padding:.2rem .55rem;display:flex;align-items:center;gap:.2rem;}
+.tc-body{padding:1.1rem 1.15rem;flex:1;display:flex;flex-direction:column;}
+.tc-loc{font-size:.73rem;color:var(--text-muted);margin-bottom:.3rem;display:flex;align-items:center;gap:.25rem;}
+.tc-title{font-family:'DM Serif Display',serif;font-size:1.05rem;margin-bottom:.5rem;}
+.tc-stats{display:flex;gap:.85rem;font-size:.77rem;color:var(--text-muted);margin-bottom:.85rem;}
+.tc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.75rem;border-top:1px solid var(--border);}
+.tc-price{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--brand-dark);}
+.tc-price span{font-family:'DM Sans',sans-serif;font-size:.68rem;color:var(--text-muted);display:block;}
+.cat-card{border-radius:14px;overflow:hidden;position:relative;height:210px;display:block;cursor:pointer;}
+.cat-card img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.cat-card:hover img{transform:scale(1.06);}
+.cat-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,5,5,.75) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.1rem;}
+.cat-tag{font-size:.67rem;text-transform:uppercase;letter-spacing:.8px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:.2rem .55rem;width:fit-content;margin-bottom:.35rem;}
+.cat-name{font-family:'DM Serif Display',serif;font-size:1.15rem;color:#fff;}
+.cat-count{font-size:.73rem;color:rgba(255,255,255,.6);margin-top:.1rem;}
+.step-num{width:44px;height:44px;border-radius:50%;background:var(--brand-light);color:var(--brand-dark);font-family:'DM Serif Display',serif;font-size:1.2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+.step-title{font-weight:500;margin-bottom:.3rem;font-size:.95rem;}
+.step-desc{font-size:.84rem;color:var(--text-muted);line-height:1.65;}
+.t-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.4rem;height:100%;}
+.t-stars{color:#f59e0b;font-size:.82rem;letter-spacing:1px;margin-bottom:.75rem;}
+.t-quote{font-family:'DM Serif Display',serif;font-size:1rem;line-height:1.65;margin-bottom:1rem;color:#2a2a2a;}
+.t-footer{display:flex;align-items:center;gap:.75rem;}
+.t-avatar{width:36px;height:36px;border-radius:50%;background:var(--brand-light);color:var(--brand-dark);font-size:.8rem;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.t-name{font-size:.84rem;font-weight:500;}.t-sub{font-size:.73rem;color:var(--text-muted);}
+.cta-banner{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand) 100%);border-radius:18px;padding:3.5rem;color:#fff;position:relative;overflow:hidden;}
+.cta-banner::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.05);}
+.cta-banner h2{font-family:'DM Serif Display',serif;font-size:2.2rem;margin-bottom:.6rem;}
+.cta-banner p{color:rgba(255,255,255,.75);max-width:420px;line-height:1.7;margin-bottom:1.75rem;font-size:.92rem;}
+.btn-cta-white{background:#fff;color:var(--brand-dark);border:none;border-radius:10px;padding:.7rem 1.75rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .15s;}
+.btn-cta-white:hover{opacity:.9;color:var(--brand-dark);}
 </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg" id="navbar">
-  <div class="container">
-    <a class="navbar-brand" href="#">Trek<em>&</em>Camp</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav ms-auto align-items-center gap-1">
-        <li class="nav-item"><a class="nav-link" href="treks.html">Treks</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Camps</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Guides</a></li>
-        <li class="nav-item"><a class="nav-link" href="my_bookings.html">My Bookings</a></li>
-        <li class="nav-item"><a class="nav-link btn-nav ms-2" href="login.html">Login / Sign Up</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<div id="nav-placeholder"></div>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg">
-    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80" alt="Himalayan Trek">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80" alt="Sahyadri Mountains">
   </div>
   <div class="hero-content container">
-    <div class="hero-eyebrow">Himalayan Adventures Await</div>
-    <h1 class="hero-title">Find Your<br><em>Perfect Trek</em></h1>
-    <p class="hero-sub">Hand-curated treks across India's most breathtaking mountain ranges. Expert guides, fully managed camps, safe and unforgettable.</p>
+    <div class="hero-eyebrow">Sahyadri & Beyond · Maharashtra</div>
+    <h1 class="hero-title">Conquer the<br><em>Sahyadris</em></h1>
+    <p class="hero-sub">From Harishchandragad's ancient caves to Kalsubai's towering summit — Maharashtra's finest treks, expertly guided and fully managed.</p>
     <div class="hero-actions">
-      <a href="treks.html" class="btn-hero-primary">
-        Explore Treks
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-      <a href="#how-it-works" class="btn-hero-secondary">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-        How It Works
-      </a>
+      <a href="treks.html" class="btn-hero-p">Explore Treks <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a href="#how-it-works" class="btn-hero-s">How It Works</a>
     </div>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="val">50+</div><div class="lbl">Trek Routes</div></div>
-      <div class="hero-stat"><div class="val">2,400+</div><div class="lbl">Happy Trekkers</div></div>
+      <div class="hero-stat"><div class="val">10</div><div class="lbl">Trek Routes</div></div>
+      <div class="hero-stat"><div class="val">1,800+</div><div class="lbl">Trekkers</div></div>
       <div class="hero-stat"><div class="val">4.8★</div><div class="lbl">Avg. Rating</div></div>
     </div>
   </div>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
+  <div class="scroll-ind"><span>Scroll</span><div class="scroll-line"></div></div>
 </section>
 
-<!-- SEARCH CARD -->
-<section style="background:#f9f9f7; padding-bottom:0;">
+<!-- SEARCH -->
+<section style="background:var(--bg);padding-bottom:0;">
   <div class="container">
     <div class="search-card">
       <div class="row g-3 align-items-end">
-        <div class="col-md-3 search-field">
-          <label>Destination</label>
-          <input type="text" placeholder="Where do you want to go?">
+        <div class="col-md-3">
+          <label class="form-lbl">Trek Name / Region</label>
+          <input type="text" id="sq" class="form-ctrl" placeholder="Harishchandragad, Pune…">
         </div>
-        <div class="col-md-2 search-field">
-          <label>Difficulty</label>
-          <select><option>Any Difficulty</option><option>Easy</option><option>Moderate</option><option>Difficult</option><option>Extreme</option></select>
+        <div class="col-md-2">
+          <label class="form-lbl">Difficulty</label>
+          <select id="sd" class="form-ctrl"><option value="">Any</option><option>Easy</option><option>Moderate</option><option>Difficult</option><option>Extreme</option></select>
         </div>
-        <div class="col-md-2 search-field">
-          <label>Duration</label>
-          <select><option>Any Duration</option><option>1–3 Days</option><option>4–6 Days</option><option>7–10 Days</option><option>10+ Days</option></select>
+        <div class="col-md-2">
+          <label class="form-lbl">Duration</label>
+          <select id="sdu" class="form-ctrl"><option value="">Any</option><option value="1">1 Day</option><option value="2">2 Days</option><option value="3+">3+ Days</option></select>
         </div>
-        <div class="col-md-2 search-field">
-          <label>When</label>
-          <input type="month" style="color:var(--text-muted);">
+        <div class="col-md-2">
+          <label class="form-lbl">Max Budget</label>
+          <select id="sb" class="form-ctrl"><option value="">Any</option><option value="1000">Under ₹1,000</option><option value="2000">Under ₹2,000</option><option value="5000">Under ₹5,000</option></select>
         </div>
         <div class="col-md-3">
-          <button class="btn-search">
+          <button class="btn-search" onclick="doSearch()">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             Search Treks
           </button>
@@ -226,54 +136,51 @@
   </div>
 </section>
 
+<!-- REGIONS STRIP -->
+<section style="background:#fff;border-bottom:1px solid var(--border);padding:.85rem 0;">
+  <div class="container">
+    <div class="region-strip">
+      <a href="treks.html" class="region-chip active">All Regions</a>
+      <a href="treks.html?region=Pune" class="region-chip">Pune</a>
+      <a href="treks.html?region=Nashik" class="region-chip">Nashik</a>
+      <a href="treks.html?region=Ahmednagar" class="region-chip">Ahmednagar</a>
+      <a href="treks.html?region=Raigad" class="region-chip">Raigad</a>
+      <a href="treks.html?region=Thane" class="region-chip">Thane</a>
+    </div>
+  </div>
+</section>
+
 <!-- CATEGORIES -->
-<section class="section" style="padding-top:4rem;">
+<section class="section" style="padding-top:3.5rem;">
   <div class="container">
     <div class="row align-items-end mb-4">
-      <div class="col">
-        <div class="section-eyebrow">Browse by Type</div>
-        <h2 class="section-title" style="margin-bottom:0;">Trek Categories</h2>
-      </div>
-      <div class="col-auto"><a href="treks.html" style="font-size:0.85rem; color:var(--brand); text-decoration:none; font-weight:500;">View all →</a></div>
+      <div class="col"><div class="eyebrow">Browse by Type</div><h2 class="sec-title mb-0">Trek Categories</h2></div>
+      <div class="col-auto"><a href="treks.html" style="font-size:.85rem;color:var(--brand);font-weight:500;">View all →</a></div>
     </div>
     <div class="row g-3">
       <div class="col-md-4">
-        <a href="treks.html" class="cat-card">
-          <img src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&q=75" alt="Easy">
-          <div class="cat-overlay">
-            <div class="cat-badge">Beginner</div>
-            <div class="cat-name">Easy Treks</div>
-            <div class="cat-count">12 treks available</div>
-          </div>
+        <a href="treks.html?difficulty=Easy" class="cat-card">
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=75" alt="Easy">
+          <div class="cat-overlay"><div class="cat-tag">Beginner</div><div class="cat-name">Easy Treks</div><div class="cat-count">3 routes · Sinhagad, Rajmachi, Naneghat</div></div>
         </a>
       </div>
       <div class="col-md-4">
-        <a href="treks.html" class="cat-card">
-          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75" alt="Moderate">
-          <div class="cat-overlay">
-            <div class="cat-badge">Intermediate</div>
-            <div class="cat-name">Moderate Treks</div>
-            <div class="cat-count">18 treks available</div>
-          </div>
+        <a href="treks.html?difficulty=Moderate" class="cat-card">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=75" alt="Moderate">
+          <div class="cat-overlay"><div class="cat-tag">Intermediate</div><div class="cat-name">Moderate Treks</div><div class="cat-count">5 routes · Harishchandragad, Kalsubai +3</div></div>
         </a>
       </div>
       <div class="col-md-4 row g-3 m-0 p-0">
         <div class="col-12 px-0">
-          <a href="treks.html" class="cat-card" style="height:103px;">
+          <a href="treks.html?difficulty=Difficult" class="cat-card" style="height:100px;">
             <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=600&q=75" alt="Difficult">
-            <div class="cat-overlay">
-              <div class="cat-badge">Advanced</div>
-              <div class="cat-name">Difficult Treks</div>
-            </div>
+            <div class="cat-overlay"><div class="cat-tag">Advanced</div><div class="cat-name">Difficult Treks</div></div>
           </a>
         </div>
         <div class="col-12 px-0">
-          <a href="treks.html" class="cat-card" style="height:103px;">
+          <a href="treks.html?difficulty=Extreme" class="cat-card" style="height:100px;">
             <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&q=75" alt="Extreme">
-            <div class="cat-overlay">
-              <div class="cat-badge">Expert Only</div>
-              <div class="cat-name">Extreme Treks</div>
-            </div>
+            <div class="cat-overlay"><div class="cat-tag">Expert Only</div><div class="cat-name">Extreme Treks</div></div>
           </a>
         </div>
       </div>
@@ -282,168 +189,51 @@
 </section>
 
 <!-- FEATURED TREKS -->
-<section class="section" style="background:#fff; padding-top:4rem;">
+<section class="section" style="background:#fff;padding-top:3.5rem;">
   <div class="container">
     <div class="row align-items-end mb-4">
-      <div class="col">
-        <div class="section-eyebrow">Handpicked for You</div>
-        <h2 class="section-title" style="margin-bottom:0.3rem;">Featured Treks</h2>
-        <p class="section-sub">Our most-booked, highest-rated adventures this season.</p>
-      </div>
-      <div class="col-auto"><a href="treks.html" style="font-size:0.85rem; color:var(--brand); text-decoration:none; font-weight:500;">All treks →</a></div>
+      <div class="col"><div class="eyebrow">Handpicked</div><h2 class="sec-title mb-1">Featured Treks</h2><p class="sec-sub">Maharashtra's most loved Sahyadri adventures this season.</p></div>
+      <div class="col-auto"><a href="treks.html" style="font-size:.85rem;color:var(--brand);font-weight:500;">All treks →</a></div>
     </div>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="trek-mini">
-          <div class="img-wrap">
-            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500&q=75" alt="Kedarkantha">
-            <span class="diff-badge diff-moderate">Moderate</span>
-            <div class="rating-chip">
-              <svg width="10" height="10" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              4.9
-            </div>
-          </div>
-          <div class="body">
-            <div class="loc"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Uttarakhand</div>
-            <h4>Kedarkantha Trek</h4>
-            <div class="meta"><span>6 Days</span><span>3,810 m</span><span>Max 18</span></div>
-            <div class="footer">
-              <div class="price"><span>From</span>₹8,500</div>
-              <a href="trek_detail.html" class="btn-mini">Book Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="trek-mini">
-          <div class="img-wrap">
-            <img src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=500&q=75" alt="Valley of Flowers">
-            <span class="diff-badge diff-easy">Easy</span>
-            <div class="rating-chip">
-              <svg width="10" height="10" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              4.8
-            </div>
-          </div>
-          <div class="body">
-            <div class="loc"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Uttarakhand</div>
-            <h4>Valley of Flowers</h4>
-            <div class="meta"><span>7 Days</span><span>3,658 m</span><span>Max 20</span></div>
-            <div class="footer">
-              <div class="price"><span>From</span>₹11,500</div>
-              <a href="trek_detail.html" class="btn-mini">Book Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="trek-mini">
-          <div class="img-wrap">
-            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&q=75" alt="Kashmir Great Lakes">
-            <span class="diff-badge diff-difficult">Difficult</span>
-            <div class="rating-chip">
-              <svg width="10" height="10" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              4.9
-            </div>
-          </div>
-          <div class="body">
-            <div class="loc"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Jammu & Kashmir</div>
-            <h4>Kashmir Great Lakes</h4>
-            <div class="meta"><span>9 Days</span><span>4,191 m</span><span>Max 12</span></div>
-            <div class="footer">
-              <div class="price"><span>From</span>₹18,500</div>
-              <a href="trek_detail.html" class="btn-mini">Book Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="row g-4" id="featuredGrid"></div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
 <section class="section" id="how-it-works">
   <div class="container">
-    <div class="text-center mb-5">
-      <div class="section-eyebrow">Simple Process</div>
-      <h2 class="section-title">How It Works</h2>
-    </div>
-    <div class="row g-4">
-      <div class="col-md-3 text-center">
-        <div class="step-num mx-auto">1</div>
-        <div class="step-title">Browse Treks</div>
-        <div class="step-desc">Explore treks by difficulty, duration, region, and price. Read detailed itineraries and camp info.</div>
-      </div>
-      <div class="col-md-3 text-center">
-        <div class="step-num mx-auto">2</div>
-        <div class="step-title">Choose a Batch</div>
-        <div class="step-desc">Pick a departure date that suits you. See live availability and how many spots remain.</div>
-      </div>
-      <div class="col-md-3 text-center">
-        <div class="step-num mx-auto">3</div>
-        <div class="step-title">Book & Pay</div>
-        <div class="step-desc">Add your participants, confirm special requirements, and pay securely via UPI, Card, or Net Banking.</div>
-      </div>
-      <div class="col-md-3 text-center">
-        <div class="step-num mx-auto">4</div>
-        <div class="step-title">Hit the Trail</div>
-        <div class="step-desc">Get pickup details, packing lists, and meet your certified guide. All logistics handled for you.</div>
-      </div>
+    <div class="text-center mb-5"><div class="eyebrow">Simple Process</div><h2 class="sec-title">How It Works</h2></div>
+    <div class="row g-4 text-center">
+      <div class="col-md-3"><div class="step-num">1</div><div class="step-title">Browse Treks</div><div class="step-desc">Filter by difficulty, region, and price. Read full itineraries, camp details, and guide profiles.</div></div>
+      <div class="col-md-3"><div class="step-num">2</div><div class="step-title">Pick a Batch</div><div class="step-desc">Choose a departure date with available slots and get instant confirmation.</div></div>
+      <div class="col-md-3"><div class="step-num">3</div><div class="step-title">Book & Pay</div><div class="step-desc">Add participants, pay securely via UPI, Card, or Net Banking. Instant e-ticket.</div></div>
+      <div class="col-md-3"><div class="step-num">4</div><div class="step-title">Hit the Trail</div><div class="step-desc">We handle transport, camps, meals and permits. You just show up and trek.</div></div>
     </div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="section" style="background:#fff; padding-top:4rem;">
+<section class="section" style="background:#fff;padding-top:3.5rem;">
   <div class="container">
     <div class="row align-items-end mb-4">
-      <div class="col">
-        <div class="section-eyebrow">Trekker Stories</div>
-        <h2 class="section-title" style="margin-bottom:0;">What People Say</h2>
-      </div>
+      <div class="col"><div class="eyebrow">Trekker Stories</div><h2 class="sec-title mb-0">What People Say</h2></div>
     </div>
     <div class="row g-4">
-      <div class="col-md-4">
-        <div class="testimonial-card">
-          <div class="stars mb-2">★★★★★</div>
-          <p class="t-quote">The Kedarkantha summit at sunrise was a moment I will remember for the rest of my life. Rajesh made the entire trek feel effortless.</p>
-          <div class="t-footer">
-            <div class="t-avatar">AS</div>
-            <div><div class="t-name">Ananya Sharma</div><div class="t-meta">Kedarkantha Trek · March 2026</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="testimonial-card">
-          <div class="stars mb-2">★★★★★</div>
-          <p class="t-quote">Booking was incredibly smooth. The camp food was surprisingly good for high altitude. Already planning my next trek with Trek&Camp.</p>
-          <div class="t-footer">
-            <div class="t-avatar">VP</div>
-            <div><div class="t-name">Vikram Patil</div><div class="t-meta">Valley of Flowers · July 2025</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="testimonial-card">
-          <div class="stars mb-2">★★★★★</div>
-          <p class="t-quote">Kashmir Great Lakes was beyond anything I imagined. The logistics were flawless — transport, camps, guides, everything was perfectly organised.</p>
-          <div class="t-footer">
-            <div class="t-avatar">MJ</div>
-            <div><div class="t-name">Meera Joshi</div><div class="t-meta">Kashmir Great Lakes · Aug 2025</div></div>
-          </div>
-        </div>
-      </div>
+      <div class="col-md-4"><div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">The sunrise from Harishchandragad's Kokan Kada was beyond words. Every detail was handled perfectly.</p><div class="t-footer"><div class="t-avatar">PD</div><div><div class="t-name">Priya Deshmukh</div><div class="t-sub">Harishchandragad · Feb 2026</div></div></div></div></div>
+      <div class="col-md-4"><div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">Standing on Kalsubai — the highest point in Maharashtra — was a feeling I'll carry forever. Booking was seamless.</p><div class="t-footer"><div class="t-avatar">AK</div><div><div class="t-name">Amit Kulkarni</div><div class="t-sub">Kalsubai Peak · Jan 2026</div></div></div></div></div>
+      <div class="col-md-4"><div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">Rajgad overnight was magical. Camping inside the fort walls, guide explaining Maratha history — unforgettable.</p><div class="t-footer"><div class="t-avatar">SJ</div><div><div class="t-name">Sneha Joshi</div><div class="t-sub">Rajgad Fort · Dec 2025</div></div></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- CTA BANNER -->
-<section class="section" style="padding-top:4rem;">
+<!-- CTA -->
+<section class="section" style="padding-top:3.5rem;">
   <div class="container">
     <div class="cta-banner">
       <div class="row align-items-center">
         <div class="col-lg-8">
-          <h2>Ready for Your Next Adventure?</h2>
-          <p>Summer 2026 batches are filling fast. Secure your spot today and get free cancellation up to 7 days before departure.</p>
+          <h2>Ready for Your Sahyadri Adventure?</h2>
+          <p>Monsoon and winter batches are filling fast. Book now with free cancellation up to 7 days before departure.</p>
           <a href="treks.html" class="btn-cta-white">Browse All Treks</a>
         </div>
       </div>
@@ -451,52 +241,47 @@
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="brand">Trek<em>&</em>Camp</div>
-        <p>Hand-curated Himalayan adventures. Safe, well-organised, unforgettable.</p>
-      </div>
-      <div class="col-md-2">
-        <h6>Explore</h6>
-        <a href="treks.html">All Treks</a>
-        <a href="#">Camps</a>
-        <a href="#">Guides</a>
-        <a href="#">Blog</a>
-      </div>
-      <div class="col-md-2">
-        <h6>Account</h6>
-        <a href="login.html">Login</a>
-        <a href="login.html">Sign Up</a>
-        <a href="my_bookings.html">My Bookings</a>
-      </div>
-      <div class="col-md-2">
-        <h6>Support</h6>
-        <a href="#">FAQ</a>
-        <a href="#">Cancellation Policy</a>
-        <a href="#">Contact Us</a>
-      </div>
-      <div class="col-md-2">
-        <h6>Legal</h6>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Trek&Camp. All rights reserved.</span>
-      <span>Made with care for the mountains.</span>
-    </div>
-  </div>
-</footer>
-
+<div id="footer-placeholder"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="shared.js"></script>
 <script>
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 60);
-  });
+renderNav(); renderFooter();
+
+// Render featured treks (first 3: T001, T002, T003)
+const featured = TREKS.filter(t=>['T001','T002','T003'].includes(t.id));
+document.getElementById('featuredGrid').innerHTML = featured.map(t=>`
+  <div class="col-md-4">
+    <div class="trek-card" onclick="location.href='trek_detail.html?id=${t.id}'">
+      <div class="tc-img">
+        <img src="${t.thumb}" alt="${t.name}">
+        <span class="badge-diff diff-${t.difficulty.toLowerCase()} position-absolute" style="top:10px;left:10px;">${t.difficulty}</span>
+        <div class="tc-rating"><svg width="10" height="10" fill="#f59e0b" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>${t.rating}</div>
+      </div>
+      <div class="tc-body">
+        <div class="tc-loc"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>${t.region}, Maharashtra</div>
+        <h3 class="tc-title">${t.name}</h3>
+        <div class="tc-stats"><span>${t.days} Day${t.days>1?'s':''}</span><span>${t.altitude}</span><span>Max ${t.maxGroup}</span></div>
+        <div class="tc-footer">
+          <div class="tc-price"><span>From</span>₹${t.price.toLocaleString('en-IN')}</div>
+          <a href="trek_detail.html?id=${t.id}" class="btn-brand" style="font-size:.78rem;padding:.4rem .9rem;" onclick="event.stopPropagation()">View & Book</a>
+        </div>
+      </div>
+    </div>
+  </div>`).join('');
+
+function doSearch(){
+  const q=document.getElementById('sq').value;
+  const d=document.getElementById('sd').value;
+  const du=document.getElementById('sdu').value;
+  const b=document.getElementById('sb').value;
+  let url='treks.html?';
+  if(q) url+='q='+encodeURIComponent(q)+'&';
+  if(d) url+='difficulty='+d+'&';
+  if(du) url+='duration='+du+'&';
+  if(b) url+='budget='+b+'&';
+  location.href=url;
+}
+document.getElementById('sq').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 </script>
 </body>
 </html>

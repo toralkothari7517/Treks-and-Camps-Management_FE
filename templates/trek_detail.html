@@ -1,697 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trek Detail – Treks & Camps</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Trek Detail – Trek&Camp Maharashtra</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-  :root {
-    --brand: #1a6b4a;
-    --brand-light: #e8f5ee;
-    --brand-dark: #0f4a32;
-    --text-main: #1c1c1c;
-    --text-muted: #6b7280;
-    --border: #e5e7eb;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 400;
-    color: var(--text-main);
-    background: #f9f9f7;
-    margin: 0;
-  }
-
-  /* NAVBAR */
-  .navbar {
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-    padding: 0.85rem 0;
-  }
-  .navbar-brand {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.35rem;
-    color: var(--brand-dark) !important;
-    letter-spacing: -0.3px;
-  }
-  .navbar-brand span { color: var(--brand); }
-  .nav-link {
-    font-size: 0.875rem;
-    color: var(--text-muted) !important;
-    font-weight: 400;
-    padding: 0.4rem 0.9rem !important;
-    transition: color 0.15s;
-  }
-  .nav-link:hover { color: var(--brand-dark) !important; }
-  .btn-nav-book {
-    background: var(--brand);
-    color: #fff !important;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    padding: 0.4rem 1.1rem !important;
-    font-weight: 500;
-    transition: background 0.15s;
-  }
-  .btn-nav-book:hover { background: var(--brand-dark); }
-
-  /* HERO */
-  .trek-hero {
-    position: relative;
-    height: 420px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #1a6b4a 0%, #2d9e6a 40%, #1a4a2e 100%);
-  }
-  .trek-hero img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    opacity: 0.55;
-  }
-  .trek-hero-overlay {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 2.5rem;
-    background: linear-gradient(to top, rgba(10,30,20,0.75) 0%, transparent 60%);
-  }
-  .trek-hero-overlay h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.6rem;
-    color: #fff;
-    margin: 0 0 0.5rem;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
-  }
-  .badge-difficulty {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 0.3rem 0.75rem;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.18);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.35);
-    backdrop-filter: blur(4px);
-    margin-bottom: 0.75rem;
-    width: fit-content;
-  }
-  .hero-meta {
-    display: flex; gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-  }
-  .hero-meta span {
-    color: rgba(255,255,255,0.85);
-    font-size: 0.875rem;
-    display: flex; align-items: center; gap: 0.4rem;
-  }
-  .hero-meta svg { opacity: 0.75; }
-
-  /* BREADCRUMB */
-  .breadcrumb-bar {
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-    padding: 0.65rem 0;
-  }
-  .breadcrumb { margin: 0; font-size: 0.8rem; }
-  .breadcrumb-item a { color: var(--brand); text-decoration: none; }
-  .breadcrumb-item.active { color: var(--text-muted); }
-  .breadcrumb-item + .breadcrumb-item::before { color: var(--text-muted); }
-
-  /* MAIN LAYOUT */
-  .main-content { padding: 2rem 0 4rem; }
-
-  /* STAT PILLS ROW */
-  .stat-pills {
-    display: flex; flex-wrap: wrap; gap: 0.75rem;
-    margin-bottom: 2rem;
-  }
-  .stat-pill {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.6rem 1.1rem;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .stat-pill .pill-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    background: var(--brand-light);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .stat-pill .pill-label { font-size: 0.72rem; color: var(--text-muted); }
-  .stat-pill .pill-value { font-size: 0.95rem; font-weight: 500; }
-
-  /* SECTION HEADINGS */
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.25rem;
-    margin: 0 0 1rem;
-    letter-spacing: -0.2px;
-  }
-
-  /* OVERVIEW CARD */
-  .card-clean {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-  .card-clean p {
-    color: #444;
-    font-size: 0.93rem;
-    line-height: 1.75;
-    margin: 0;
-  }
-
-  /* ITINERARY */
-  .itinerary-item {
-    display: flex; gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .itinerary-item:last-child { border-bottom: none; }
-  .day-badge {
-    min-width: 48px; height: 48px;
-    border-radius: 10px;
-    background: var(--brand-light);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .day-badge .day-num {
-    font-size: 1.1rem; font-weight: 500;
-    color: var(--brand-dark); line-height: 1;
-  }
-  .day-badge .day-label {
-    font-size: 0.6rem; color: var(--brand);
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .itinerary-info h6 {
-    margin: 0 0 0.25rem;
-    font-size: 0.92rem; font-weight: 500;
-  }
-  .itinerary-info p {
-    margin: 0; font-size: 0.82rem;
-    color: var(--text-muted); line-height: 1.5;
-  }
-
-  /* CAMPS */
-  .camp-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
-    display: flex; align-items: flex-start; gap: 0.85rem;
-  }
-  .camp-icon {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    background: var(--brand-light);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .camp-card h6 { margin: 0 0 0.2rem; font-size: 0.9rem; font-weight: 500; }
-  .camp-card p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
-
-  /* GUIDE CARD */
-  .guide-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    display: flex; align-items: center; gap: 1rem;
-  }
-  .guide-avatar {
-    width: 52px; height: 52px;
-    border-radius: 50%;
-    background: var(--brand-light);
-    color: var(--brand-dark);
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.2rem;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .guide-card h6 { margin: 0 0 0.2rem; font-size: 0.95rem; font-weight: 500; }
-  .guide-card p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
-  .cert-badge {
-    display: inline-block;
-    background: #edf7f2; color: var(--brand-dark);
-    font-size: 0.72rem; padding: 0.2rem 0.55rem;
-    border-radius: 20px; margin-top: 0.35rem;
-    border: 1px solid #c0dfd0;
-  }
-
-  /* SIDEBAR BOOKING */
-  .booking-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: sticky; top: 80px;
-  }
-  .booking-card-header {
-    background: var(--brand);
-    padding: 1.25rem 1.5rem;
-    color: #fff;
-  }
-  .booking-card-header .price-big {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2rem;
-    line-height: 1;
-  }
-  .booking-card-header .price-note {
-    font-size: 0.8rem; opacity: 0.8; margin-top: 0.2rem;
-  }
-  .booking-card-body { padding: 1.25rem 1.5rem; }
-  .booking-field label {
-    font-size: 0.78rem; color: var(--text-muted);
-    display: block; margin-bottom: 0.35rem; font-weight: 500;
-  }
-  .booking-field select,
-  .booking-field input {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.55rem 0.85rem;
-    font-size: 0.88rem;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-    transition: border-color 0.15s;
-    background: #fff;
-  }
-  .booking-field select:focus,
-  .booking-field input:focus { border-color: var(--brand); }
-  .btn-book-now {
-    display: block; width: 100%;
-    background: var(--brand);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 0.8rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s;
-    margin-top: 1rem;
-  }
-  .btn-book-now:hover { background: var(--brand-dark); }
-  .availability-bar {
-    background: var(--border);
-    border-radius: 20px;
-    height: 6px;
-    margin-top: 0.4rem;
-    overflow: hidden;
-  }
-  .availability-fill {
-    background: var(--brand);
-    height: 100%;
-    border-radius: 20px;
-    width: 68%;
-  }
-  .avail-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem; }
-  .avail-urgent { color: #c45c1a; }
-  .booking-divider {
-    border: none; border-top: 1px solid var(--border);
-    margin: 1rem 0;
-  }
-  .booking-fee-row {
-    display: flex; justify-content: space-between;
-    font-size: 0.83rem; margin-bottom: 0.4rem;
-  }
-  .booking-fee-row.total {
-    font-weight: 500; font-size: 0.9rem;
-    border-top: 1px solid var(--border);
-    padding-top: 0.6rem; margin-top: 0.3rem;
-  }
-  .booking-fee-row span:first-child { color: var(--text-muted); }
-
-  /* REVIEWS */
-  .review-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.1rem 1.25rem;
-    margin-bottom: 0.85rem;
-  }
-  .review-header {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 0.5rem;
-  }
-  .reviewer-name { font-size: 0.9rem; font-weight: 500; }
-  .review-date { font-size: 0.78rem; color: var(--text-muted); }
-  .stars { color: #f59e0b; font-size: 0.85rem; letter-spacing: 1px; }
-  .review-text { font-size: 0.85rem; color: #444; line-height: 1.6; margin: 0; }
-
-  /* TAGS */
-  .tag {
-    display: inline-block;
-    background: var(--brand-light);
-    color: var(--brand-dark);
-    font-size: 0.78rem;
-    padding: 0.3rem 0.7rem;
-    border-radius: 20px;
-    margin: 0.2rem;
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    .trek-hero { height: 300px; }
-    .trek-hero-overlay h1 { font-size: 1.8rem; }
-    .stat-pills { gap: 0.5rem; }
-  }
+.trek-hero{position:relative;height:440px;overflow:hidden;background:var(--brand-dark);}
+.trek-hero img{width:100%;height:100%;object-fit:cover;opacity:.55;}
+.trek-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:2.5rem;background:linear-gradient(to top,rgba(10,5,5,.78) 0%,transparent 60%);}
+.hero-diff-tag{display:inline-block;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;padding:.28rem .75rem;border-radius:20px;background:rgba(255,255,255,.17);color:#fff;border:1px solid rgba(255,255,255,.32);backdrop-filter:blur(4px);margin-bottom:.7rem;width:fit-content;}
+.hero-title{font-family:'DM Serif Display',serif;font-size:2.6rem;color:#fff;margin:0 0 .5rem;letter-spacing:-.5px;line-height:1.1;}
+.hero-meta{display:flex;gap:1.4rem;flex-wrap:wrap;}
+.hero-meta span{color:rgba(255,255,255,.82);font-size:.84rem;display:flex;align-items:center;gap:.35rem;}
+.stat-pills{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:2rem;}
+.stat-pill{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.55rem 1rem;display:flex;align-items:center;gap:.5rem;}
+.pill-icon{width:30px;height:30px;border-radius:7px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pill-label{font-size:.68rem;color:var(--text-muted);}
+.pill-val{font-size:.9rem;font-weight:500;}
+.itinerary-item{display:flex;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border);}
+.itinerary-item:last-child{border-bottom:none;}
+.day-badge{min-width:46px;height:46px;border-radius:9px;background:var(--brand-light);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.day-badge .dn{font-size:1.05rem;font-weight:500;color:var(--brand-dark);line-height:1;}
+.day-badge .dl{font-size:.58rem;color:var(--brand);text-transform:uppercase;letter-spacing:.5px;}
+.itinerary-info h6{margin:0 0 .2rem;font-size:.88rem;font-weight:500;}
+.itinerary-info p{margin:0;font-size:.8rem;color:var(--text-muted);line-height:1.55;}
+.camp-row{background:#fff;border:1px solid var(--border);border-radius:9px;padding:.9rem;margin-bottom:.7rem;display:flex;align-items:flex-start;gap:.8rem;}
+.camp-icon{width:34px;height:34px;border-radius:7px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.camp-row h6{margin:0 0 .18rem;font-size:.87rem;font-weight:500;}
+.camp-row p{margin:0;font-size:.77rem;color:var(--text-muted);}
+.booking-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:sticky;top:75px;}
+.booking-header{background:var(--brand);padding:1.15rem 1.4rem;color:#fff;}
+.price-big{font-family:'DM Serif Display',serif;font-size:2rem;line-height:1;}
+.price-note{font-size:.78rem;opacity:.8;margin-top:.2rem;}
+.booking-body{padding:1.2rem 1.4rem;}
+.bf label{font-size:.75rem;color:var(--text-muted);display:block;margin-bottom:.3rem;font-weight:500;}
+.bf select,.bf input{width:100%;border:1px solid var(--border);border-radius:8px;padding:.52rem .82rem;font-size:.86rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s;background:#fff;}
+.bf select:focus,.bf input:focus{border-color:var(--brand);}
+.fee-row{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.38rem;}
+.fee-row span:first-child{color:var(--text-muted);}
+.fee-total{font-weight:500;font-size:.9rem;border-top:1px solid var(--border);padding-top:.55rem;margin-top:.2rem;display:flex;justify-content:space-between;}
+.btn-book-now{display:block;width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:.75rem;font-family:'DM Sans',sans-serif;font-size:.93rem;font-weight:500;cursor:pointer;transition:background .15s;margin-top:.9rem;text-decoration:none;text-align:center;}
+.btn-book-now:hover{background:var(--brand-dark);color:#fff;}
+.guarantee{display:flex;align-items:flex-start;gap:.45rem;background:var(--brand-light);border-radius:7px;padding:.6rem .8rem;margin-top:.75rem;}
+.guarantee p{font-size:.72rem;color:var(--brand-dark);line-height:1.5;margin:0;}
+.avail-bar{background:var(--border);border-radius:20px;height:5px;margin-top:.35rem;overflow:hidden;}
+.avail-fill{background:var(--brand);height:100%;border-radius:20px;}
+.tag{display:inline-block;background:var(--brand-light);color:var(--brand-dark);font-size:.75rem;padding:.25rem .65rem;border-radius:20px;margin:.2rem;}
+.cert-badge{display:inline-block;background:#edf7f2;color:#0f4a32;font-size:.7rem;padding:.18rem .52rem;border-radius:20px;margin-top:.3rem;border:1px solid #c0dfd0;margin-right:.3rem;}
+.guide-block{display:flex;align-items:center;gap:1rem;}
+.guide-avatar{width:50px;height:50px;border-radius:50%;background:var(--brand-light);color:var(--brand-dark);font-family:'DM Serif Display',serif;font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rev-card{background:#fff;border:1px solid var(--border);border-radius:9px;padding:1rem 1.1rem;margin-bottom:.8rem;}
+.rev-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;}
+.rev-name{font-size:.88rem;font-weight:500;}
+.rev-date{font-size:.75rem;color:var(--text-muted);}
+.rev-stars{color:#f59e0b;font-size:.82rem;letter-spacing:1px;}
+.rev-text{font-size:.83rem;color:#444;line-height:1.6;margin:0;}
+@media(max-width:768px){.trek-hero{height:300px;}.hero-title{font-size:1.85rem;}}
 </style>
 </head>
 <body>
+<div id="nav-placeholder"></div>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
-    <a class="navbar-brand" href="#">Trek<span>&</span>Camp</a>
-    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav ms-auto align-items-center gap-1">
-        <li class="nav-item"><a class="nav-link" href="#">Treks</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Camps</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Guides</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">My Bookings</a></li>
-        <li class="nav-item"><a class="nav-link btn-nav-book ms-2" href="#">Book Now</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<div class="bc-bar"><div class="container">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item"><a href="treks.html">Treks</a></li>
+    <li class="breadcrumb-item active" id="bc-name">Trek</li>
+  </ol>
+</div></div>
 
-<!-- HERO -->
-<div class="trek-hero">
-  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=80" alt="Kedarkantha Trek">
-  <div class="trek-hero-overlay container">
-    <div class="badge-difficulty">Moderate</div>
-    <h1>Kedarkantha Trek</h1>
-    <div class="hero-meta">
-      <span>
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        Uttarakhand, India
-      </span>
-      <span>
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Jun 14 – Jun 20, 2026
-      </span>
-      <span>
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        12 / 18 spots filled
-      </span>
-    </div>
-  </div>
-</div>
-
-<!-- BREADCRUMB -->
-<div class="breadcrumb-bar">
-  <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Treks</a></li>
-        <li class="breadcrumb-item active">Kedarkantha Trek</li>
-      </ol>
-    </nav>
-  </div>
-</div>
+<!-- HERO (injected by JS) -->
+<div id="trek-hero"></div>
 
 <!-- MAIN -->
-<div class="main-content">
+<div style="padding:2rem 0 4rem;">
   <div class="container">
     <div class="row g-4">
-
-      <!-- LEFT COLUMN -->
-      <div class="col-lg-8">
-
-        <!-- STAT PILLS -->
-        <div class="stat-pills">
-          <div class="stat-pill">
-            <div class="pill-icon">
-              <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <div>
-              <div class="pill-label">Duration</div>
-              <div class="pill-value">6 Days</div>
-            </div>
-          </div>
-          <div class="stat-pill">
-            <div class="pill-icon">
-              <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg>
-            </div>
-            <div>
-              <div class="pill-label">Max Altitude</div>
-              <div class="pill-value">3,810 m</div>
-            </div>
-          </div>
-          <div class="stat-pill">
-            <div class="pill-icon">
-              <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            </div>
-            <div>
-              <div class="pill-label">Group Size</div>
-              <div class="pill-value">Max 18</div>
-            </div>
-          </div>
-          <div class="stat-pill">
-            <div class="pill-icon">
-              <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            </div>
-            <div>
-              <div class="pill-label">Rating</div>
-              <div class="pill-value">4.7 / 5</div>
-            </div>
-          </div>
-          <div class="stat-pill">
-            <div class="pill-icon">
-              <svg width="16" height="16" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            </div>
-            <div>
-              <div class="pill-label">Transport</div>
-              <div class="pill-value">Included</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- OVERVIEW -->
-        <div class="card-clean">
-          <h2 class="section-title">Overview</h2>
-          <p>The Kedarkantha trek is one of the most stunning winter treks in India, offering breathtaking views of snow-capped Himalayan peaks. Starting from Sankri village, the trail weaves through dense pine and oak forests, frozen streams, and vast alpine meadows blanketed in white. The summit rewards trekkers with a panoramic view of peaks like Swargarohini, Bandarpoonch, and Black Peak.</p>
-          <p style="margin-top:0.85rem 0 0;">This trek is perfect for beginners who want their first Himalayan summit experience, as well as seasoned trekkers looking for a scenic winter escape. Camping under star-lit skies at over 3,000 metres is an unforgettable experience.</p>
-          <div class="mt-3">
-            <span class="tag">Snow Trek</span>
-            <span class="tag">Winter</span>
-            <span class="tag">Himalayan</span>
-            <span class="tag">Summit</span>
-            <span class="tag">Beginner Friendly</span>
-          </div>
-        </div>
-
-        <!-- ITINERARY -->
-        <div class="card-clean">
-          <h2 class="section-title">Day-by-Day Itinerary</h2>
-          <div class="itinerary-item">
-            <div class="day-badge"><div class="day-num">1</div><div class="day-label">Day</div></div>
-            <div class="itinerary-info">
-              <h6>Dehradun → Sankri Village</h6>
-              <p>Drive from Dehradun to Sankri (200 km, ~9 hrs). Check into camp, briefing session with guides, acclimatisation walk.</p>
-            </div>
-          </div>
-          <div class="itinerary-item">
-            <div class="day-badge"><div class="day-num">2</div><div class="day-label">Day</div></div>
-            <div class="itinerary-info">
-              <h6>Sankri → Juda Ka Talab (2,730 m)</h6>
-              <p>Trek through dense forests of pine and oak. Arrive at the frozen lake campsite. Distance: 6 km, ~5 hrs.</p>
-            </div>
-          </div>
-          <div class="itinerary-item">
-            <div class="day-badge"><div class="day-num">3</div><div class="day-label">Day</div></div>
-            <div class="itinerary-info">
-              <h6>Juda Ka Talab → Kedarkantha Base (3,500 m)</h6>
-              <p>Gradual ascent through open meadows. Stunning views of the Himalayan range. Distance: 4 km, ~4 hrs.</p>
-            </div>
-          </div>
-          <div class="itinerary-item">
-            <div class="day-badge"><div class="day-num">4</div><div class="day-label">Day</div></div>
-            <div class="itinerary-info">
-              <h6>Summit Day – Kedarkantha Peak (3,810 m)</h6>
-              <p>Early morning summit push (3 hrs). 360° panoramic views. Descend to Hergaon campsite. Distance: 12 km.</p>
-            </div>
-          </div>
-          <div class="itinerary-item">
-            <div class="day-badge"><div class="day-num">5</div><div class="day-label">Day</div></div>
-            <div class="itinerary-info">
-              <h6>Hergaon → Sankri</h6>
-              <p>Descend through pine forest back to Sankri. Final camp dinner and celebration.</p>
-            </div>
-          </div>
-          <div class="itinerary-item">
-            <div class="day-badge"><div class="day-num">6</div><div class="day-label">Day</div></div>
-            <div class="itinerary-info">
-              <h6>Sankri → Dehradun (Departure)</h6>
-              <p>Morning drive back to Dehradun. Drop-off at railway station / bus stand by 6 PM.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- CAMPS -->
-        <div class="card-clean">
-          <h2 class="section-title">Camps on This Trek</h2>
-          <div class="camp-card">
-            <div class="camp-icon">
-              <svg width="18" height="18" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
-            </div>
-            <div>
-              <h6>Juda Ka Talab Camp</h6>
-              <p>Altitude: 2,730 m · Capacity: 25 · Facilities: Dining tent, sleeping tents, bonfire area</p>
-            </div>
-          </div>
-          <div class="camp-card">
-            <div class="camp-icon">
-              <svg width="18" height="18" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
-            </div>
-            <div>
-              <h6>Kedarkantha Base Camp</h6>
-              <p>Altitude: 3,500 m · Capacity: 20 · Facilities: High-altitude tents, hot meals, first aid</p>
-            </div>
-          </div>
-          <div class="camp-card">
-            <div class="camp-icon">
-              <svg width="18" height="18" fill="none" stroke="#1a6b4a" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
-            </div>
-            <div>
-              <h6>Hergaon Campsite</h6>
-              <p>Altitude: 2,600 m · Capacity: 30 · Facilities: Dining tent, sleeping tents, medical tent</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- GUIDE -->
-        <div class="card-clean">
-          <h2 class="section-title">Your Guide</h2>
-          <div class="guide-card">
-            <div class="guide-avatar">RK</div>
-            <div>
-              <h6>Rajesh Kumar</h6>
-              <p>8 years experience · Specialisation: High Altitude Himalayan Treks</p>
-              <div class="cert-badge">IMF Certified</div>
-              <div class="cert-badge" style="margin-left:0.3rem;">First Aid</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- REVIEWS -->
-        <div class="card-clean">
-          <h2 class="section-title">What Trekkers Say</h2>
-          <div class="review-card">
-            <div class="review-header">
-              <div><div class="reviewer-name">Ananya S.</div><div class="stars">★★★★★</div></div>
-              <div class="review-date">March 2026</div>
-            </div>
-            <p class="review-text">Absolutely stunning experience. The summit view at sunrise was worth every bit of the climb. Rajesh was an excellent guide — knowledgeable and patient with beginners like me.</p>
-          </div>
-          <div class="review-card">
-            <div class="review-header">
-              <div><div class="reviewer-name">Vikram P.</div><div class="stars">★★★★★</div></div>
-              <div class="review-date">January 2026</div>
-            </div>
-            <p class="review-text">Second time on this trek and it never gets old. The camp arrangements were excellent — warm food, quality tents, and well-organised logistics.</p>
-          </div>
-          <div class="review-card">
-            <div class="review-header">
-              <div><div class="reviewer-name">Meera J.</div><div class="stars">★★★★☆</div></div>
-              <div class="review-date">December 2025</div>
-            </div>
-            <p class="review-text">Great trek for first-timers. The route is well-marked and the team takes safety seriously. Minor suggestion: the Day 1 drive timing could be better coordinated.</p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- SIDEBAR -->
-      <div class="col-lg-4">
-        <div class="booking-card">
-          <div class="booking-card-header">
-            <div class="price-big">₹8,500</div>
-            <div class="price-note">per person, all inclusive</div>
-          </div>
-          <div class="booking-card-body">
-
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <div style="font-size:0.78rem; color:var(--text-muted);">Availability</div>
-                <div style="font-size:0.82rem; font-weight:500;" class="avail-urgent">Only 6 spots left!</div>
-              </div>
-              <span style="font-size:0.78rem; color:var(--text-muted);">12 / 18</span>
-            </div>
-            <div class="availability-bar"><div class="availability-fill"></div></div>
-
-            <hr class="booking-divider">
-
-            <div class="booking-field mb-3">
-              <label>Select Instance / Batch</label>
-              <select>
-                <option>Jun 14 – Jun 20, 2026</option>
-                <option>Jul 5 – Jul 11, 2026</option>
-                <option>Aug 10 – Aug 16, 2026</option>
-              </select>
-            </div>
-
-            <div class="booking-field mb-3">
-              <label>Number of Participants</label>
-              <input type="number" min="1" max="6" value="2">
-            </div>
-
-            <div class="booking-field mb-2">
-              <label>Special Requirements</label>
-              <input type="text" placeholder="Dietary needs, medical info…">
-            </div>
-
-            <hr class="booking-divider">
-
-            <div class="booking-fee-row"><span>Base price × 2</span><span>₹17,000</span></div>
-            <div class="booking-fee-row"><span>Transport</span><span>Included</span></div>
-            <div class="booking-fee-row"><span>Taxes & fees</span><span>₹850</span></div>
-            <div class="booking-fee-row total"><span>Total</span><span>₹17,850</span></div>
-
-            <button class="btn-book-now">Confirm Booking</button>
-
-            <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-top:0.75rem; margin-bottom:0;">Free cancellation up to 7 days before departure</p>
-          </div>
-        </div>
-      </div>
-
+      <div class="col-lg-8" id="trek-content"></div>
+      <div class="col-lg-4" id="booking-sidebar"></div>
     </div>
   </div>
 </div>
 
+<div id="footer-placeholder"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="shared.js"></script>
 <script>
-  const numInput = document.querySelector('input[type="number"]');
-  const totalEl = document.querySelector('.booking-fee-row.total span:last-child');
-  const baseEl = document.querySelector('.booking-fee-row span:last-child');
-  const basePrice = 8500, tax = 850;
+renderNav(); renderFooter();
 
-  function updatePrice() {
-    const n = parseInt(numInput.value) || 1;
-    const base = basePrice * n;
-    document.querySelectorAll('.booking-fee-row')[0].querySelector('span:first-child').textContent = `Base price × ${n}`;
-    document.querySelectorAll('.booking-fee-row')[0].querySelector('span:last-child').textContent = `₹${base.toLocaleString('en-IN')}`;
-    document.querySelectorAll('.booking-fee-row')[2].querySelector('span:last-child').textContent = `₹${(Math.round(base * 0.05)).toLocaleString('en-IN')}`;
-    totalEl.textContent = `₹${(base + Math.round(base * 0.05)).toLocaleString('en-IN')}`;
-  }
-  numInput.addEventListener('input', updatePrice);
+const id = new URLSearchParams(location.search).get('id') || 'T001';
+const t = getTrekById(id) || TREKS[0];
+
+document.title = t.name + ' – Trek&Camp Maharashtra';
+document.getElementById('bc-name').textContent = t.name;
+
+// HERO
+document.getElementById('trek-hero').innerHTML = `
+<div class="trek-hero">
+  <img src="${t.img}" alt="${t.name}">
+  <div class="trek-hero-overlay container">
+    <div class="hero-diff-tag">${t.difficulty}</div>
+    <h1 class="hero-title">${t.name}</h1>
+    <div class="hero-meta">
+      <span>📍 ${t.region}, Maharashtra</span>
+      <span>⏱ ${t.days} Day${t.days>1?'s':''}</span>
+      <span>Next batch: ${t.instances[0].start} 2026</span>
+    </div>
+  </div>
+</div>`;
+
+// CONTENT
+const slotsUsed = t.maxGroup - t.instances[0].slots;
+const slotsTotal = t.maxGroup;
+const slotsLeft = t.instances[0].slots;
+const pct = Math.round(slotsUsed/slotsTotal*100);
+
+document.getElementById('trek-content').innerHTML = `
+  <!-- STAT PILLS -->
+  <div class="stat-pills">
+    <div class="stat-pill"><div class="pill-icon"><svg width="15" height="15" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="pill-label">Duration</div><div class="pill-val">${t.days} Day${t.days>1?'s':''}</div></div></div>
+    <div class="stat-pill"><div class="pill-icon"><svg width="15" height="15" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/></svg></div><div><div class="pill-label">Max Altitude</div><div class="pill-val">${t.altitude}</div></div></div>
+    <div class="stat-pill"><div class="pill-icon"><svg width="15" height="15" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="pill-label">Group Size</div><div class="pill-val">Max ${t.maxGroup}</div></div></div>
+    <div class="stat-pill"><div class="pill-icon"><svg width="15" height="15" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div><div class="pill-label">Rating</div><div class="pill-val">${t.rating} / 5</div></div></div>
+    <div class="stat-pill"><div class="pill-icon"><svg width="15" height="15" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div><div class="pill-label">Transport From</div><div class="pill-val">${t.transport}</div></div></div>
+  </div>
+  <!-- OVERVIEW -->
+  <div class="card-clean">
+    <h2 class="card-sec-title">Overview</h2>
+    <p style="color:#444;font-size:.92rem;line-height:1.78;">${t.desc}</p>
+    <div class="mt-3">${t.tags.map(tag=>`<span class="tag">${tag}</span>`).join('')}</div>
+  </div>
+  <!-- ITINERARY -->
+  <div class="card-clean">
+    <h2 class="card-sec-title">Day-by-Day Itinerary</h2>
+    ${t.itinerary.map((day,i)=>`
+    <div class="itinerary-item">
+      <div class="day-badge"><div class="dn">${i+1}</div><div class="dl">Day</div></div>
+      <div class="itinerary-info"><h6>${day.title}</h6><p>${day.desc}</p></div>
+    </div>`).join('')}
+  </div>
+  <!-- CAMPS -->
+  <div class="card-clean">
+    <h2 class="card-sec-title">Camp${t.camps.length>1?'s':''} on This Trek</h2>
+    ${t.camps.map(c=>`
+    <div class="camp-row">
+      <div class="camp-icon"><svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg></div>
+      <div><h6>${c.name}</h6><p>Altitude: ${c.alt} · Capacity: ${c.cap} · ${c.fac}</p></div>
+    </div>`).join('')}
+  </div>
+  <!-- GUIDE -->
+  <div class="card-clean">
+    <h2 class="card-sec-title">Your Guide</h2>
+    <div class="guide-block">
+      <div class="guide-avatar">${t.guide.name.split(' ').map(w=>w[0]).join('').substring(0,2)}</div>
+      <div>
+        <div style="font-weight:500;font-size:.92rem;">${t.guide.name}</div>
+        <div style="font-size:.78rem;color:var(--text-muted);">${t.guide.exp} experience · ${t.guide.spec}</div>
+        <span class="cert-badge">${t.guide.cert}</span><span class="cert-badge">First Aid</span>
+      </div>
+    </div>
+  </div>
+  <!-- REVIEWS (static, realistic) -->
+  <div class="card-clean">
+    <h2 class="card-sec-title">What Trekkers Say</h2>
+    <div class="rev-card"><div class="rev-head"><div><div class="rev-name">Priya D.</div><div class="rev-stars">★★★★★</div></div><div class="rev-date">Mar 2026</div></div><p class="rev-text">Absolutely stunning experience. The guide was knowledgeable and patient. Camp arrangements were excellent.</p></div>
+    <div class="rev-card"><div class="rev-head"><div><div class="rev-name">Amit K.</div><div class="rev-stars">★★★★★</div></div><div class="rev-date">Jan 2026</div></div><p class="rev-text">Well-organised end to end. The scenery was breathtaking. Already planning my next trek with Trek&Camp.</p></div>
+    <div class="rev-card"><div class="rev-head"><div><div class="rev-name">Sneha J.</div><div class="rev-stars">★★★★☆</div></div><div class="rev-date">Dec 2025</div></div><p class="rev-text">Great experience overall. Minor suggestion: pack a light rain jacket even in winter — the fog can surprise you.</p></div>
+  </div>`;
+
+// BOOKING SIDEBAR
+const instOptions = t.instances.map(inst=>`<option value="${inst.id}">${inst.start}${inst.start!==inst.end?' – '+inst.end:''}, 2026 · ${inst.slots} spots left</option>`).join('');
+document.getElementById('booking-sidebar').innerHTML = `
+<div class="booking-card">
+  <div class="booking-header">
+    <div class="price-big">₹${t.price.toLocaleString('en-IN')}</div>
+    <div class="price-note">per person · all inclusive</div>
+  </div>
+  <div class="booking-body">
+    <div class="d-flex justify-content-between align-items-start mb-1">
+      <div style="font-size:.78rem;color:var(--text-muted);">Availability</div>
+      <span style="font-size:.78rem;color:${slotsLeft<=5?'#dc2626':'var(--text-muted)'};">${slotsLeft} / ${slotsTotal} spots</span>
+    </div>
+    <div class="avail-bar mb-3"><div class="avail-fill" style="width:${pct}%;"></div></div>
+    <div class="bf mb-3"><label>Select Batch</label><select id="batchSel">${instOptions}</select></div>
+    <div class="bf mb-3"><label>Participants</label><input type="number" id="numP" min="1" max="6" value="1"></div>
+    <div class="bf mb-2"><label>Special Requirements</label><input type="text" id="specReq" placeholder="Dietary needs, medical info…"></div>
+    <hr style="border-color:var(--border);margin:1rem 0;">
+    <div class="fee-row"><span>Base price × <span id="pNum">1</span></span><span id="baseAmt">₹${t.price.toLocaleString('en-IN')}</span></div>
+    <div class="fee-row"><span>Transport & camps</span><span>Included</span></div>
+    <div class="fee-row"><span>GST (5%)</span><span id="gstAmt">₹${Math.round(t.price*0.05).toLocaleString('en-IN')}</span></div>
+    <div class="fee-total"><span>Total</span><span id="totalAmt">₹${Math.round(t.price*1.05).toLocaleString('en-IN')}</span></div>
+    <a href="book_trek.html?id=${t.id}&instance=" id="bookBtn" class="btn-book-now">Continue to Book</a>
+    <div class="guarantee">
+      <svg width="13" height="13" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <p>Free cancellation up to 7 days before departure. Secure SSL payment.</p>
+    </div>
+  </div>
+</div>`;
+
+// Live price update + book link
+const numPEl = document.getElementById('numP');
+const batchEl = document.getElementById('batchSel');
+function updatePrice(){
+  const n = parseInt(numPEl.value)||1;
+  const base = t.price*n;
+  const gst = Math.round(base*0.05);
+  document.getElementById('pNum').textContent=n;
+  document.getElementById('baseAmt').textContent='₹'+base.toLocaleString('en-IN');
+  document.getElementById('gstAmt').textContent='₹'+gst.toLocaleString('en-IN');
+  document.getElementById('totalAmt').textContent='₹'+(base+gst).toLocaleString('en-IN');
+  document.getElementById('bookBtn').href=`book_trek.html?id=${t.id}&instance=${batchEl.value}&participants=${n}&req=${encodeURIComponent(document.getElementById('specReq')?.value||'')}`;
+}
+numPEl.addEventListener('input',updatePrice);
+batchEl.addEventListener('change',updatePrice);
 </script>
 </body>
 </html>
