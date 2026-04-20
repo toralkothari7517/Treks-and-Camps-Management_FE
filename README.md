@@ -42,3 +42,4 @@ python app.py
 - The app includes a simple booking workflow and basic admin pages.
 - Use the SQL scripts to manage database objects and generate reports.
 - For production, replace the Flask secret key and use secure credentials.
+- For backend handoff after recent UI updates, see `HANDOFF_BACKEND_INTEGRATION.md`.

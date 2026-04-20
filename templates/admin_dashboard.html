@@ -97,12 +97,14 @@
             <div class="row g-3 mt-3">
               <div class="col-md-6">
                 <label class="form-label">Main Image</label>
-                <input type="file" class="form-control" id="mainImg" accept="image/*">
+                <input type="file" class="form-control" id="mainImg" accept="image/*" title="Upload 1200 x 700 px image">
+                <div class="form-text">Required: 1200 x 700 px (JPG/PNG, max 5MB). This is used as trek cover image.</div>
                 <img id="mainPreview" class="img-preview mt-2" style="display:none;">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Thumbnail</label>
-                <input type="file" class="form-control" id="thumbImg" accept="image/*">
+                <input type="file" class="form-control" id="thumbImg" accept="image/*" title="Upload 500 x 320 px image">
+                <div class="form-text">Required: 500 x 320 px (JPG/PNG, max 5MB). This is used in trek cards.</div>
                 <img id="thumbPreview" class="img-preview mt-2" style="display:none;">
               </div>
             </div>
@@ -173,6 +175,20 @@
     let editingId = null;
     let pendingMainImage = '';
     let pendingThumbImage = '';
+    const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
+    function validateImageFile(file, label) {
+      if (!file) return false;
+      if (!file.type.startsWith('image/')) {
+        alert(`${label}: please upload an image file.`);
+        return false;
+      }
+      if (file.size > MAX_UPLOAD_BYTES) {
+        alert(`${label}: image size should be 5MB or less.`);
+        return false;
+      }
+      return true;
+    }
 
     function toDisplayDate(isoDate) {
       if (!isoDate) return '';
@@ -405,12 +421,20 @@
 
     document.getElementById('mainImg').addEventListener('change', async (e) => {
       if (!e.target.files?.length) return;
+      if (!validateImageFile(e.target.files[0], 'Main Image')) {
+        e.target.value = '';
+        return;
+      }
       pendingMainImage = await fileToBase64(e.target.files[0], 1200, 700, 0.85);
       setImagePreview('mainPreview', pendingMainImage);
     });
 
     document.getElementById('thumbImg').addEventListener('change', async (e) => {
       if (!e.target.files?.length) return;
+      if (!validateImageFile(e.target.files[0], 'Thumbnail')) {
+        e.target.value = '';
+        return;
+      }
       pendingThumbImage = await fileToBase64(e.target.files[0], 500, 320, 0.82);
       setImagePreview('thumbPreview', pendingThumbImage);
     });

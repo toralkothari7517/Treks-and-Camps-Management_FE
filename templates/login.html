@@ -150,14 +150,14 @@ function handleLogin(){
   if(!p.value||p.value.length<6){document.getElementById('passGrp').classList.add('has-error');ok=false;}
   if(ok){
     setUserRole(adminChk.checked ? 'admin' : 'user');
-    const next = new URLSearchParams(location.search).get('next') || (isAdmin() ? 'admin_dashboard.html' : 'my_bookings.html');
+    const next = new URLSearchParams(location.search).get('next') || 'index.html';
     location.href = next;
   }
 }
 function handleSignup(){
   const e=document.getElementById('suEmail'),p=document.getElementById('suPass');
   if(!e.value.includes('@')||p.value.length<6){alert('Please fill in all fields correctly.');return;}
-  location.href='my_bookings.html';
+  location.href='index.html';
 }
 </script>
 </body>
