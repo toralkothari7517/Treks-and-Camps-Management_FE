@@ -125,6 +125,8 @@ const params = new URLSearchParams(location.search);
 let activeDiff = params.get('difficulty') || 'all';
 let activeRegion = params.get('region') || 'all';
 const urlQ = params.get('q') || '';
+const urlDuration = params.get('duration') || '';
+const urlBudget = parseInt(params.get('budget') || '', 10);
 
 // Build carousel from first 3 treks
 const carouselTreks = TREKS.slice(0,3);
@@ -200,7 +202,11 @@ function applyFilters(){
     const diffOk = activeDiff==='all'||card.dataset.difficulty===activeDiff;
     const regOk = activeRegion==='all'||card.dataset.region===activeRegion;
     const qOk = !urlQ || card.querySelector('.tc-title').textContent.toLowerCase().includes(urlQ.toLowerCase());
-    const show = diffOk&&regOk&&qOk;
+    const durationVal = parseInt(card.dataset.duration, 10);
+    const durationOk = !urlDuration || (urlDuration === '3+' ? durationVal >= 3 : durationVal === parseInt(urlDuration, 10));
+    const budgetVal = parseInt(card.dataset.price, 10);
+    const budgetOk = Number.isNaN(urlBudget) || budgetVal <= urlBudget;
+    const show = diffOk&&regOk&&qOk&&durationOk&&budgetOk;
     card.style.display=show?'':'none';
     if(show) vis.push(card);
   });

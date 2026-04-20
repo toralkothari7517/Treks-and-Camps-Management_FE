@@ -175,13 +175,20 @@ async function fileToBase64(file, maxW=800, maxH=600, quality=0.8) {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         
         canvas.toBlob(blob => {
-          const base64 = URL.createObjectURL(blob);
-          resolve(base64);
+          if (!blob) {
+            reject(new Error('Image processing failed'));
+            return;
+          }
+          const outReader = new FileReader();
+          outReader.onload = () => resolve(outReader.result);
+          outReader.onerror = reject;
+          outReader.readAsDataURL(blob);
         }, 'image/jpeg', quality);
       };
       img.src = e.target.result;
     };
 
+    reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
