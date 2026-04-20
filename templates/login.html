@@ -93,7 +93,12 @@ body{background:var(--brand-dark);min-height:100vh;}
         <div class="ferr">Password must be at least 6 characters.</div>
       </div>
       <a href="#" style="font-size:.76rem;color:var(--brand);float:right;margin-top:-.55rem;margin-bottom:.8rem;display:block;">Forgot password?</a>
-      <button class="btn-auth" onclick="handleLogin()">Sign In</button>
+<div class="fg">
+  <label>
+    <input type="checkbox" id="adminMode"> Admin Mode?
+  </label>
+</div>
+<button class="btn-auth" onclick="handleLogin()">Sign In</button>
       <div class="divider"><span>or</span></div>
       <button class="btn-social"><svg width="17" height="17" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>Continue with Google</button>
       <div class="auth-foot">No account? <a onclick="switchTab('signup')">Sign up free</a></div>
@@ -137,15 +142,16 @@ function chkStrength(v){
   f.style.width=w[s];f.style.background=c[s];
 }
 function handleLogin(){
-  const e=document.getElementById('loginEmail'),p=document.getElementById('loginPass');
+  const e=document.getElementById('loginEmail'),p=document.getElementById('loginPass'),adminChk=document.getElementById('adminMode');
   let ok=true;
   document.getElementById('emailGrp').classList.remove('has-error');
   document.getElementById('passGrp').classList.remove('has-error');
   if(!e.value||!e.value.includes('@')){document.getElementById('emailGrp').classList.add('has-error');ok=false;}
   if(!p.value||p.value.length<6){document.getElementById('passGrp').classList.add('has-error');ok=false;}
   if(ok){
-    const next = new URLSearchParams(location.search).get('next');
-    location.href = next || 'my_bookings.html';
+    setUserRole(adminChk.checked ? 'admin' : 'user');
+    const next = new URLSearchParams(location.search).get('next') || (isAdmin() ? 'admin_dashboard.html' : 'my_bookings.html');
+    location.href = next;
   }
 }
 function handleSignup(){

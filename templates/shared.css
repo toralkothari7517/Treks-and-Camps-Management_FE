@@ -1,12 +1,12 @@
 /* ── TOKENS ── */
 :root{
-  --brand:#8B9A7B; --brand2:#9BB08F; --brand-light:#E8EDE3;
-  --brand-dark:#5D6A5A; --brand-mid:#7A8C6F;
+--brand:#1a6b4a; --brand-light:#e8f5ee;
+  --brand-dark:#0f4a32; --brand-mid:#1a6b4a; --brand2:#1a6b4a;
   --text-main:#1A241A; --text-muted:#6B7280;
   --border:#e2e8e6; --bg:#F9FBFA; --white:#fff;
   --radius:13px; --card-radius:15px;
-  --shadow-sm:0 2px 8px rgba(139,154,123,.08);
-  --shadow-md:0 8px 32px rgba(139,154,123,.12);
+--shadow-sm:0 2px 8px rgba(26,107,74,.08);
+  --shadow-md:0 8px 32px rgba(26,107,74,.12);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;color:var(--text-main);background:var(--bg);}
@@ -66,11 +66,11 @@ img{display:block;}
 textarea.form-ctrl{resize:vertical;min-height:78px;}
 
 /* ── FOOTER ── */
-.site-footer{background:#F0F4EF;color:rgba(26,36,26,.8);padding:3.5rem 0 1.5rem;}
-.site-footer .brand{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#1A241A;margin-bottom:.45rem;}
-.site-footer .brand em{color:#C4D8B8;font-style:normal;}
+.site-footer{background:#e8f5ee;color:rgba(15,74,50,.8);padding:3.5rem 0 1.5rem;}
+.site-footer .brand{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#0f4a32;margin-bottom:.45rem;}
+.site-footer .brand em{color:#1a6b4a;font-style:normal;}
 .site-footer p{font-size:.82rem;max-width:240px;line-height:1.7;}
-.site-footer h6{color:rgba(26,36,26,.5);font-size:.63rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.8rem;}
-.site-footer a{color:rgba(26,36,26,.65);font-size:.84rem;display:block;margin-bottom:.38rem;transition:color .15s;}
+.site-footer h6{color:rgba(15,74,50,.5);font-size:.63rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.8rem;}
+.site-footer a{color:rgba(15,74,50,.65);font-size:.84rem;display:block;margin-bottom:.38rem;transition:color .15s;}
 .site-footer a:hover{color:var(--text-main);}
-.footer-bottom{border-top:1px solid rgba(139,154,123,.2);margin-top:2.5rem;padding-top:1.2rem;font-size:.76rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.footer-bottom{border-top:1px solid rgba(26,107,74,.2);margin-top:2.5rem;padding-top:1.2rem;font-size:.76rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
