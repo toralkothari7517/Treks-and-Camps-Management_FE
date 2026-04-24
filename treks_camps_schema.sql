@@ -67,6 +67,7 @@ CREATE TABLE Trek (
     Price DECIMAL(10, 2) NOT NULL CHECK (Price >= 0),
     Difficulty_Level ENUM('Easy', 'Moderate', 'Difficult', 'Extreme') NOT NULL,
     Description TEXT,
+    Inclusions TEXT,
     Duration_Days INT NOT NULL CHECK (Duration_Days > 0),
     Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

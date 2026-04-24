@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Login – Trek&Camp Maharashtra</title>
+<title>Login – Trek&Camp</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
@@ -56,11 +56,11 @@ body{background:var(--brand-dark);min-height:100vh;}
 <body>
 <div class="auth-wrap">
   <div class="auth-left">
-    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80" alt="Sahyadri">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80" alt="Mountains">
     <div class="al-c">
       <div class="al-brand">Trek<em>&</em>Camp</div>
       <h2 class="al-title">Where Every Trek<br>Begins With <em>One Step</em></h2>
-      <p class="al-sub">Book Harishchandragad, Rajgad, Kalsubai and 7 more Maharashtra treks with expert guides and full logistics support.</p>
+      <p class="al-sub">Book our popular treks with expert guides and full logistics support.</p>
       <div class="al-stats">
         <div class="al-stat"><div class="sv">10</div><div class="sl">Trek Routes</div></div>
         <div class="al-stat"><div class="sv">1,800+</div><div class="sl">Trekkers</div></div>
@@ -95,18 +95,23 @@ body{background:var(--brand-dark);min-height:100vh;}
       <a href="#" style="font-size:.76rem;color:var(--brand);float:right;margin-top:-.55rem;margin-bottom:.8rem;display:block;">Forgot password?</a>
 <div class="fg">
   <label>
-    <input type="checkbox" id="adminMode"> Admin Mode?
+    <input type="checkbox" id="adminMode" onchange="document.getElementById('adminIdContainer').style.display = this.checked ? 'block' : 'none'"> Admin Mode?
   </label>
+</div>
+<div class="fg" id="adminIdContainer" style="display:none;">
+  <label>Admin ID</label>
+  <input type="text" id="adminIdInput" placeholder="e.g. ADM001">
+  <div class="ferr" id="adminErr">Admin ID is required to login as Admin.</div>
 </div>
 <button class="btn-auth" onclick="handleLogin()">Sign In</button>
       <div class="divider"><span>or</span></div>
-      <button class="btn-social"><svg width="17" height="17" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>Continue with Google</button>
+      <button class="btn-social" onclick="location.href='index.html'">Continue as Guest</button>
       <div class="auth-foot">No account? <a onclick="switchTab('signup')">Sign up free</a></div>
     </div>
     <!-- SIGNUP -->
     <div class="tab-panel" id="panel-signup">
       <h2 class="form-title">Create account</h2>
-      <p class="form-sub">Start booking your Sahyadri adventures today.</p>
+      <p class="form-sub">Start booking your trekking adventures today.</p>
       <div class="row g-2 mb-0">
         <div class="col-6"><div class="fg"><label>First Name</label><input type="text" placeholder="Priya"></div></div>
         <div class="col-6"><div class="fg"><label>Last Name</label><input type="text" placeholder="Deshmukh"></div></div>
@@ -121,7 +126,7 @@ body{background:var(--brand-dark);min-height:100vh;}
       </div>
       <button class="btn-auth" onclick="handleSignup()">Create My Account</button>
       <div class="divider"><span>or</span></div>
-      <button class="btn-social"><svg width="17" height="17" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></svg>Continue with Google</button>
+      <button class="btn-social" onclick="location.href='index.html'">Continue as Guest</button>
       <div class="auth-foot">Have an account? <a onclick="switchTab('login')">Sign in</a></div>
     </div>
   </div>
@@ -146,17 +151,46 @@ function handleLogin(){
   let ok=true;
   document.getElementById('emailGrp').classList.remove('has-error');
   document.getElementById('passGrp').classList.remove('has-error');
+  if(adminChk.checked) document.getElementById('adminIdContainer').classList.remove('has-error');
+
   if(!e.value||!e.value.includes('@')){document.getElementById('emailGrp').classList.add('has-error');ok=false;}
   if(!p.value||p.value.length<6){document.getElementById('passGrp').classList.add('has-error');ok=false;}
+  
+  if(adminChk.checked && !document.getElementById('adminIdInput').value.trim()) {
+    document.getElementById('adminIdContainer').classList.add('has-error');
+    ok=false;
+  }
+
   if(ok){
+    // Load mock database table for users
+    const users = JSON.parse(localStorage.getItem('tc_mock_users_table') || '[]');
+    const userObj = users.find(u => u.email === e.value);
+    
+    if (!adminChk.checked && !userObj) {
+      console.warn(`[System Login DB] Warning: User ${e.value} not found in local table.`);
+    } else {
+      console.log(`[System Login DB] Success: User ${e.value} authenticated. User ID: ${userObj ? userObj.id : 'Admin'}`);
+    }
+    console.table(users);
+
     setUserRole(adminChk.checked ? 'admin' : 'user');
-    const next = new URLSearchParams(location.search).get('next') || 'index.html';
-    location.href = next;
+    location.href = 'index.html';
   }
 }
 function handleSignup(){
   const e=document.getElementById('suEmail'),p=document.getElementById('suPass');
   if(!e.value.includes('@')||p.value.length<6){alert('Please fill in all fields correctly.');return;}
+  
+  // Save to mock database table
+  const users = JSON.parse(localStorage.getItem('tc_mock_users_table') || '[]');
+  const newId = 'USR' + Math.floor(Math.random() * 100000);
+  users.push({ id: newId, email: e.value, passLog: p.value.replace(/./g, '*'), createdAt: new Date().toISOString() });
+  localStorage.setItem('tc_mock_users_table', JSON.stringify(users));
+  
+  console.log(`[System Login DB] New User Signed Up! ID: ${newId}, Email: ${e.value}`);
+  console.table(users);
+
+  setUserRole('user');
   location.href='index.html';
 }
 </script>
